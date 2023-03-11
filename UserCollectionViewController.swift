@@ -116,12 +116,21 @@ class UserCollectionViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         let config = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) {
             (elements) -> UIMenu? in
+            
+            var favoriteToggle: UIAction
+            
             guard let item = self.dataSource.itemIdentifier(for: indexPath) else { return nil }
             
-            let favoriteToggle = UIAction(title: item.isFollowed ? "Unfollow" : "Follow") { (action) in
-                Settings.shared.toggleFollowed(user: item.user)
-                self.updateCollectionView()
+            if item.user.id != Settings.shared.currentUser.id {
+                favoriteToggle = UIAction(title: item.isFollowed ? "Unfollow" : "Follow") { (action) in
+                    Settings.shared.toggleFollowed(user: item.user)
+                    self.updateCollectionView()
+                }
+            } else {
+                favoriteToggle = UIAction(title: "You can't follow Yourself!") { (action) in
+                }
             }
+           
             return UIMenu(title: "", image: nil, options: [], children: [favoriteToggle])
         }
         return config
