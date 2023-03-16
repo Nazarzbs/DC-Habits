@@ -9,6 +9,8 @@ import UIKit
 
 class UserDetailViewController: UIViewController {
     
+
+    
     typealias DataSourseType = UICollectionViewDiffableDataSource<ViewModel.Section, ViewModel.Item>
     
     enum SectionHeader: String {
@@ -99,7 +101,7 @@ class UserDetailViewController: UIViewController {
         fatalError("init(coder: ) has not been implemented")
     }
     
-    required init?(coder: NSCoder, user: User) {
+    init?(coder: NSCoder, user: User) {
         self.user = user
         super.init(coder: coder)
     }

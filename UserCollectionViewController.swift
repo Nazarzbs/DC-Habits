@@ -6,8 +6,37 @@
 //
 
 import UIKit
+import Foundation
 
-private let reuseIdentifier = "Cell"
+class TextCell: UICollectionViewCell {
+    let label = UILabel()
+    static let reuseIdentifier = "text-cell-reuse-identifier"
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        configure()
+    }
+    required init?(coder: NSCoder) {
+        fatalError("not implemented")
+    }
+}
+
+extension TextCell {
+    func configure() {
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.adjustsFontForContentSizeCategory = true
+        contentView.addSubview(label)
+        label.font = UIFont.preferredFont(forTextStyle: .caption1)
+       
+        let inset = CGFloat(10)
+        NSLayoutConstraint.activate([
+            label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: inset),
+            label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -inset),
+            label.topAnchor.constraint(equalTo: contentView.topAnchor, constant: inset),
+            label.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -inset)
+        ])
+    }
+}
 
 class UserCollectionViewController: UICollectionViewController {
 
@@ -15,9 +44,11 @@ class UserCollectionViewController: UICollectionViewController {
     var usersRequestTask: Task<Void, Never>? = nil
     deinit { usersRequestTask?.cancel() }
     
+    static let badgeElementKind = "badge-element-kind"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        configureHierarchy()
         dataSource = createDataSource()
         collectionView.dataSource = dataSource
         collectionView.collectionViewLayout = createLayout()
@@ -27,12 +58,16 @@ class UserCollectionViewController: UICollectionViewController {
 
     typealias DataSourceType = UICollectionViewDiffableDataSource<ViewModel.Section, ViewModel.Item>
     
+    var dataSource: DataSourceType!
+    var model = Model()
+    var users: [UserCollectionViewController.ViewModel.Item] = []
+    
     enum ViewModel {
         typealias Section = Int
         
         struct Item: Hashable {
             let user: User
-            let isFollowed: Bool
+            var isFollowed: Bool
             
             func hash(into hasher: inout Hasher) {
                 hasher.combine(user)
@@ -59,36 +94,76 @@ class UserCollectionViewController: UICollectionViewController {
     }
     
     func updateCollectionView() {
-        let users = model.userByID.values.sorted().reduce(into: [ViewModel.Item]()) {
+        
+         users = model.userByID.values.sorted().reduce(into: [ViewModel.Item]()) {
             partial, user in
             partial.append(ViewModel.Item(user: user, isFollowed: model.followedUsers.contains(user)))
         }
+        
         let itemsBySection = [0: users]
         
         dataSource.applySnapshotUsing(sectionIDs: [0], itemsBySection: itemsBySection)
+        dataSource.applySnapshotUsing(sectionIDs: [0], itemsBySection: itemsBySection)
+      
     }
     
     func createDataSource() -> DataSourceType {
         let dataSource = DataSourceType(collectionView: collectionView) { collectionView, indexPath, item in
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "User", for: indexPath) as! UICollectionViewListCell
-            
-            var content = cell.defaultContentConfiguration()
-            content.text = item.user.name
-            content.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 11, leading: 8, bottom: 11, trailing: 8)
-            content.textProperties.alignment = .center
-            cell.contentConfiguration = content
+            //Get a cell of the desired kind
+           guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TextCell.reuseIdentifier, for: indexPath) as? TextCell else { fatalError("Cannot create new cell") }
+    
+            cell.label.text = item.user.name
+
+            cell.label.textAlignment = .center
+            cell.label.font = UIFont.preferredFont(forTextStyle: .title3)
+           
             var backgroundConfiguration = UIBackgroundConfiguration.clear()
+            
             backgroundConfiguration.backgroundColor = item.user.color?.uiColor ?? UIColor.systemGray4
-            cell.backgroundConfiguration = backgroundConfiguration
             backgroundConfiguration.cornerRadius = 8
+            cell.backgroundConfiguration = backgroundConfiguration
+           
             return cell
         }
+        
+        dataSource.supplementaryViewProvider = {
+            //I going to have reference to mySELF, but it is going to be WEAK / optional
+            [weak self] (collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> UICollectionReusableView? in
+            
+            guard let self = self, let model = self.dataSource.itemIdentifier(for: indexPath) else { return nil }
+            
+            let hasBadge = model.isFollowed
+            
+            //get a supplementary view of the desired kind
+            
+            if let badgeView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: BadgeSupplementaryView.reuseIdentifier, for: indexPath) as? BadgeSupplementaryView {
+                
+                //set the badge as its label (and hide the view if the user hasn't folowed by current user)
+                badgeView.isHidden = !hasBadge
+                badgeView.label.text = "✓"
+                badgeView.label.adjustsFontForContentSizeCategory = false
+               
+               
+                //return the view
+                return badgeView
+            } else {
+                fatalError("Cannot create new supplementary")
+            }
+        }
         return dataSource
+        
     }
     
     func createLayout() -> UICollectionViewCompositionalLayout {
+        
+        let badgeAnchor = NSCollectionLayoutAnchor(edges: [.bottom, .trailing], fractionalOffset: CGPoint(x: 0.001, y: -0.001))
+        
+        let badgeSize = NSCollectionLayoutSize(widthDimension: .absolute(15), heightDimension: .absolute(15))
+        
+        let badge = NSCollectionLayoutSupplementaryItem(layoutSize: badgeSize, elementKind: UserCollectionViewController.badgeElementKind, containerAnchor: badgeAnchor)
+        
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalHeight(1), heightDimension: .fractionalHeight(1))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let item = NSCollectionLayoutItem(layoutSize: itemSize,supplementaryItems: [badge])
         
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(0.45))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 2)
@@ -110,38 +185,111 @@ class UserCollectionViewController: UICollectionViewController {
         }
     }
     
-    var dataSource: DataSourceType!
-    var model = Model()
     
     override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        let config = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) {
-            (elements) -> UIMenu? in
-            
+        
+        let identifier = NSString(string: "\(users[indexPath.item])")
+        print(users[indexPath.item].user.id)
+        return UIContextMenuConfiguration(identifier: identifier, previewProvider: { [self] in
+           return UserPreviewViewController(userID: users[indexPath.item].user.id)
+        }, actionProvider: { (elements) -> UIMenu? in
+           
             var favoriteToggle: UIAction
             
             guard let item = self.dataSource.itemIdentifier(for: indexPath) else { return nil }
             
+            
             if item.user.id != Settings.shared.currentUser.id {
-                favoriteToggle = UIAction(title: item.isFollowed ? "Unfollow" : "Follow") { (action) in
+                favoriteToggle = UIAction(title: item.isFollowed ? "Unfollow" : "Follow") { [self] (action) in
+                  
+                    
                     Settings.shared.toggleFollowed(user: item.user)
+                   
                     self.updateCollectionView()
+                   
                 }
             } else {
                 favoriteToggle = UIAction(title: "You can't follow Yourself!") { (action) in
+                    return
                 }
             }
-           
             return UIMenu(title: "", image: nil, options: [], children: [favoriteToggle])
-        }
-        return config
+        })
     }
     
+    //NEXT
+    override func collectionView(_ collectionView: UICollectionView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
+        animator.addCompletion {
+        }
+    }
     
     @IBSegueAction func showUserDetail(_ coder: NSCoder, sender: Any?) -> UserDetailViewController? {
-        guard let cell = sender,
-              let indexPath = collectionView.indexPath(for: cell as! UICollectionViewCell),
-                let item = dataSource.itemIdentifier(for: indexPath) else { return nil }
+        
+        guard let item = dataSource.itemIdentifier(for: sender as! IndexPath) else { return nil }
         return UserDetailViewController(coder: coder, user: item.user)
+    }    
+}
+
+extension UserCollectionViewController {
+    func configureHierarchy() {
+        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
+        collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        collectionView.backgroundColor = .systemBackground
+        collectionView.register(TextCell.self, forCellWithReuseIdentifier: TextCell.reuseIdentifier)
+        collectionView.register(BadgeSupplementaryView.self, forSupplementaryViewOfKind: UserCollectionViewController.badgeElementKind, withReuseIdentifier: BadgeSupplementaryView.reuseIdentifier)
+        view.addSubview(collectionView)
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        collectionView.delegate = self
+        
+        self.performSegue(withIdentifier: "UserDetail", sender: indexPath)
     }
     
 }
+
+/// A view controller used for previewing and when an item is selected
+private class UserPreviewViewController: UIViewController {
+   
+    var userID: String
+    var imageRequestTask:Task<Void, Never>? = nil
+    
+   
+    private let imageView = UIImageView()
+
+    init(userID: String) {
+        self.userID = userID
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        
+        imageRequestTask = Task {
+            if let userImage = try? await ImageRequest(imageID: userID).send()  {
+                self.imageView.image = userImage
+            }
+              imageRequestTask = nil
+        }
+       
+        view.backgroundColor = .green
+        imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFit
+        imageView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        imageView.frame = view.bounds
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(imageView)
+      
+        let width = 174
+        let height = 174
+        preferredContentSize = CGSize(width: width, height: height)
+    }
+}
+

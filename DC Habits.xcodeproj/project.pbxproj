@@ -35,6 +35,7 @@
 		CEA7004A29B3C0F80000D803 /* LeaderboardHabitCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA7004929B3C0F80000D803 /* LeaderboardHabitCollectionViewCell.swift */; };
 		CEA7004C29B3CA5B0000D803 /* FollowedUserCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA7004B29B3CA5B0000D803 /* FollowedUserCollectionViewCell.swift */; };
 		CEA7005029B3DB280000D803 /* CombinedStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA7004F29B3DB280000D803 /* CombinedStatistics.swift */; };
+		CEE38C6029BE05FA005175E8 /* BadgeSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE38C5F29BE05FA005175E8 /* BadgeSupplementaryView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +69,7 @@
 		CEA7004929B3C0F80000D803 /* LeaderboardHabitCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardHabitCollectionViewCell.swift; sourceTree = SOURCE_ROOT; };
 		CEA7004B29B3CA5B0000D803 /* FollowedUserCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowedUserCollectionViewCell.swift; sourceTree = SOURCE_ROOT; };
 		CEA7004F29B3DB280000D803 /* CombinedStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombinedStatistics.swift; sourceTree = SOURCE_ROOT; };
+		CEE38C5F29BE05FA005175E8 /* BadgeSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeSupplementaryView.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +102,7 @@
 		CE57618E29A679B00009B7EE /* DC Habits */ = {
 			isa = PBXGroup;
 			children = (
+				CEE38C5F29BE05FA005175E8 /* BadgeSupplementaryView.swift */,
 				CEA7004F29B3DB280000D803 /* CombinedStatistics.swift */,
 				CEA7004B29B3CA5B0000D803 /* FollowedUserCollectionViewCell.swift */,
 				CEA7004929B3C0F80000D803 /* LeaderboardHabitCollectionViewCell.swift */,
@@ -222,6 +225,7 @@
 				CE57619029A679B00009B7EE /* AppDelegate.swift in Sources */,
 				CEA7005029B3DB280000D803 /* CombinedStatistics.swift in Sources */,
 				CEA7004029AD4C6B0000D803 /* HabitStatistics.swift in Sources */,
+				CEE38C6029BE05FA005175E8 /* BadgeSupplementaryView.swift in Sources */,
 				CEA7004629B2828B0000D803 /* HabitCount.swift in Sources */,
 				CE013DF029A6B35A005467EC /* LogHabitCollectionViewController.swift in Sources */,
 				CE013DF629A6CCD4005467EC /* Habit.swift in Sources */,
