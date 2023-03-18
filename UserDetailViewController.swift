@@ -127,11 +127,9 @@ class UserDetailViewController: UIViewController {
             } else {
                 self.model.leadingStats = nil
             }
-            self.model.leadingStats = nil
+            self.updateCollectionView()
+            habitLeadStatisticsRequestTask = nil
         }
-        self.updateCollectionView()
-        
-        habitLeadStatisticsRequestTask = nil
     }
     
     func updateCollectionView() {
