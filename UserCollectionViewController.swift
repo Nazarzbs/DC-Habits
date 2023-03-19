@@ -217,16 +217,11 @@ class UserCollectionViewController: UICollectionViewController {
         })
     }
     
-    //NEXT
-    override func collectionView(_ collectionView: UICollectionView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
-        animator.addCompletion {
-        }
-    }
     
     @IBSegueAction func showUserDetail(_ coder: NSCoder, sender: Any?) -> UserDetailViewController? {
         
         guard let item = dataSource.itemIdentifier(for: sender as! IndexPath) else { return nil }
-        return UserDetailViewController(coder: coder, user: item.user)
+        return UserDetailViewController(coder: coder, user: item.user, isFollowed: item.isFollowed)
     }    
 }
 
@@ -245,6 +240,10 @@ extension UserCollectionViewController {
         collectionView.delegate = self
         
         self.performSegue(withIdentifier: "UserDetail", sender: indexPath)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        update()
     }
     
 }

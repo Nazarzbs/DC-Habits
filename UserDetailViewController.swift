@@ -62,6 +62,18 @@ class UserDetailViewController: UIViewController {
     var model = Model()
     var user: User!
     
+    var barButton: UIBarButtonItem!
+    var isFollowed: Bool
+  
+    func toggleFollowed() -> UIImage {
+        switch isFollowed {
+        case true:
+            return UIImage(named: "circleCheckMark2")!
+        case false:
+            return UIImage(named: "circleCheckMark1")!
+        }
+    }
+    
     @IBOutlet var profileImageView: UIImageView!
     @IBOutlet var userNameLabel: UILabel!
     @IBOutlet var bioLabel: UILabel!
@@ -69,7 +81,8 @@ class UserDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        barButton = UIBarButtonItem(image: toggleFollowed(), style: .done, target: self, action: #selector(toggleFollowedButtonTapped))
+        navigationItem.rightBarButtonItem = barButton
         imageRequestTask = Task {
             if let image = try? await ImageRequest(imageID: user.id).send() {
                 self.profileImageView.image = image
@@ -101,10 +114,18 @@ class UserDetailViewController: UIViewController {
         fatalError("init(coder: ) has not been implemented")
     }
     
-    init?(coder: NSCoder, user: User) {
+    init?(coder: NSCoder, user: User, isFollowed: Bool) {
+        self.isFollowed = isFollowed
         self.user = user
         super.init(coder: coder)
     }
+    
+    @objc func toggleFollowedButtonTapped() {
+        
+        Settings.shared.toggleFollowed(user: user)
+        isFollowed.toggle()
+        barButton.image = toggleFollowed()
+        }
     
     func update() {
         userStatisticsRequestTask?.cancel()
