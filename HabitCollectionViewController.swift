@@ -9,7 +9,7 @@ import UIKit
 
 private let reuseIdentifier = "Cell"
 
-let favoriteHabitColor = UIColor(hue: 0.15, saturation: 1, brightness: 0.9, alpha: 1)
+let favoriteHabitColor = UIColor(displayP3Red: 255.0 / 255.0, green: 255.0 / 255.0, blue: 153 / 255.0, alpha: 1)
 
 class HabitCollectionViewController: UICollectionViewController {
     

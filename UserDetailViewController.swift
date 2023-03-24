@@ -82,6 +82,7 @@ class UserDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         barButton = UIBarButtonItem(image: toggleFollowed(), style: .done, target: self, action: #selector(toggleFollowedButtonTapped))
+       
         navigationItem.rightBarButtonItem = barButton
         imageRequestTask = Task {
             if let image = try? await ImageRequest(imageID: user.id).send() {
@@ -99,7 +100,7 @@ class UserDetailViewController: UIViewController {
         collectionView.dataSource = dataSource
         collectionView.collectionViewLayout = createLayout()
         view.backgroundColor = user.color?.uiColor ?? .white
-        
+                
         let tabBarAppearence = UITabBarAppearance()
         tabBarAppearence.backgroundColor = .quaternarySystemFill
         tabBarController?.tabBar.scrollEdgeAppearance = tabBarAppearence
@@ -107,7 +108,8 @@ class UserDetailViewController: UIViewController {
         navBarAppearence.backgroundColor = .quaternarySystemFill
         navigationItem.scrollEdgeAppearance = navBarAppearence
         
-        update()    
+        update()
+        
     }
     
     required init?(coder: NSCoder) {

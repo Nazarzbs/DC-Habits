@@ -171,7 +171,7 @@
         <!--Habit Detail View Controller-->
         <scene sceneID="wL5-OE-Odj">
             <objects>
-                <viewController id="1HV-FL-S9w" customClass="HabitDetailViewController" customModule="DC_Habits" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="HabitDetail" id="1HV-FL-S9w" customClass="HabitDetailViewController" customModule="DC_Habits" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="1NP-hk-Svc">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -357,7 +357,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </collectionViewCellContentView>
                                 <connections>
-                                    <segue destination="V7U-qJ-7uR" kind="show" identifier="UserDetail" destinationCreationSelector="showUserDetail:sender:" id="vVY-NY-DDc"/>
+                                    <segue destination="V7U-qJ-7uR" kind="show" identifier="UserDetail" destinationCreationSelector="showUserDetailWithCoder:sender:" id="Qzg-x4-jFg"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>

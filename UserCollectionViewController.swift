@@ -188,7 +188,7 @@ class UserCollectionViewController: UICollectionViewController {
     
     override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         
-        let identifier = NSString(string: "\(users[indexPath.item])")
+        let identifier = NSString(string: "\(users)")
         print(users[indexPath.item].user.id)
         return UIContextMenuConfiguration(identifier: identifier, previewProvider: { [self] in
            return UserPreviewViewController(userID: users[indexPath.item].user.id)
@@ -218,11 +218,13 @@ class UserCollectionViewController: UICollectionViewController {
     }
     
     
-    @IBSegueAction func showUserDetail(_ coder: NSCoder, sender: Any?) -> UserDetailViewController? {
-        
-        guard let item = dataSource.itemIdentifier(for: sender as! IndexPath) else { return nil }
+    @IBSegueAction private func showUserDetail(coder: NSCoder, sender: Any?) -> UserDetailViewController? {
+        guard let indexPath = collectionView.indexPathsForSelectedItems?.first else {
+            return nil
+        }
+        guard let item = dataSource.itemIdentifier(for: indexPath ) else { return nil }
         return UserDetailViewController(coder: coder, user: item.user, isFollowed: item.isFollowed)
-    }    
+    }
 }
 
 extension UserCollectionViewController {

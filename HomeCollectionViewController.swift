@@ -148,6 +148,8 @@ class HomeCollectionViewController: UICollectionViewController {
         }
     }
 
+    var items: [HomeCollectionViewController.ViewModel.Item]!
+    
     var model = Model()
     var dataSource: DataSourceType!
     
@@ -209,12 +211,12 @@ class HomeCollectionViewController: UICollectionViewController {
                 cell.leaderLabel.text = leadingUserRanking
                 cell.secondaryLabel.text = secondaryUserRanking
                 
-                cell.contentView.backgroundColor = favoriteHabitColor.withAlphaComponent(0.75)
+                cell.contentView.backgroundColor = UIColor(displayP3Red: 255.0 / 255.0, green: 255.0 / 255.0, blue: 153 / 255.0, alpha: 1)
                 cell.contentView.layer.cornerRadius = 8
                 cell.layer.shadowRadius = 3
                 cell.layer.shadowColor = UIColor.systemGray3.cgColor
-                cell.layer.shadowOffset = CGSize(width: 0, height: 0)
-                cell.layer.shadowOpacity = 1
+                cell.layer.shadowOffset = CGSize(width: 0, height: 5)
+                cell.layer.shadowOpacity = 5
                 cell.layer.masksToBounds = false
                 
                 return cell
@@ -222,6 +224,12 @@ class HomeCollectionViewController: UICollectionViewController {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FollowedUser", for: indexPath) as! FollowedUserCollectionViewCell
                 cell.primaryTextLabel.text = user.name
                 cell.secondaryTextLabel.text = message
+                cell.contentView.backgroundColor = UIColor(displayP3Red: 248.0 / 255.0, green: 248.0 / 255.0, blue: 255.0 / 255.0, alpha: 1)
+                cell.contentView.layer.cornerRadius = 8
+                cell.layer.shadowColor = UIColor.systemGray3.cgColor
+                cell.layer.shadowOffset = CGSize(width: 0, height: 5)
+                cell.layer.shadowOpacity = 5
+                cell.layer.masksToBounds = false
                 if indexPath.item == collectionView.numberOfItems(inSection: indexPath.section) - 1 {
                     cell.separatorLineView.isHidden = true
                 } else {
@@ -242,11 +250,13 @@ class HomeCollectionViewController: UICollectionViewController {
                 header.nameLabel.text = "Leaderboard"
                 header.nameLabel.font = UIFont.preferredFont(forTextStyle: .largeTitle)
                 header.alignLabelToTop()
+                header.backgroundColor = UIColor(displayP3Red: 255.0 / 255.0, green: 255.0 / 255.0, blue: 0, alpha: 1)
                 return header
             case .followedUsersSectionHeader:
                 let header = view as! NamedSectionHeaderView
                 header.nameLabel.text = "Following"
                 header.nameLabel.font = UIFont.preferredFont(forTextStyle: .title2)
+                header.backgroundColor = UIColor(displayP3Red: 230.0 / 255.0, green: 230.0 / 255.0, blue: 255.0 / 255.0, alpha: 1)
                 header.alignLabelToYCenter()
                 return header
             default:
@@ -270,7 +280,7 @@ class HomeCollectionViewController: UICollectionViewController {
 
                 let leaderboardSection = NSCollectionLayoutSection(group: leaderboardVerticalTrio)
                 
-                let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(80))
+                let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(60))
                 let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: SupplementaryView.leaderboardSectionHeader.viewKind, alignment: .top)
                 
                 let background = NSCollectionLayoutDecorationItem.background(elementKind: SupplementaryView.leaderboardBackground.viewKind)
@@ -279,26 +289,30 @@ class HomeCollectionViewController: UICollectionViewController {
                 leaderboardSection.decorationItems = [background]
                 leaderboardSection.supplementariesFollowContentInsets = false
                 
-                leaderboardSection.interGroupSpacing = 20
+                leaderboardSection.interGroupSpacing = 30
 
                 leaderboardSection.orthogonalScrollingBehavior = .continuous
-                leaderboardSection.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 20, bottom: 20, trailing: 20)
+                leaderboardSection.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 20, bottom: 12, trailing: 20)
 
                 return leaderboardSection
             case .followedUsers:
-                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100))
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(80))
                 let followedUserItem = NSCollectionLayoutItem(layoutSize: itemSize)
                 
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100))
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(80))
+                
                 let followedUserGroup = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: followedUserItem, count: 1)
                 
+                followedUserGroup.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12)
+                followedUserGroup.interItemSpacing = .fixed(25)
+
                 let followedUserSection = NSCollectionLayoutSection(group: followedUserGroup)
-                
-                let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(60))
+                followedUserSection.interGroupSpacing = 25
+                let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.06), heightDimension: .absolute(40))
                 let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: SupplementaryView.followedUsersSectionHeader.viewKind, alignment: .top)
                 
                 followedUserSection.boundarySupplementaryItems = [header]
-
+                followedUserSection.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 8, bottom: 0, trailing: 8)
                 return followedUserSection
             }
         }
@@ -391,11 +405,10 @@ class HomeCollectionViewController: UICollectionViewController {
         }
         
         sectionIDs.append(.leaderboard)
-        
+        items = leaderboardItems
         var itemsBySection = [ViewModel.Section.leaderboard: leaderboardItems]
         
         var followedUserItems = [ViewModel.Item]()
-
         func loggedHabitNames(for user: User) -> Set<String> {
             var names = [String]()
 
@@ -447,7 +460,7 @@ class HomeCollectionViewController: UICollectionViewController {
                     message = "You're tied at \(ordinalString(from: followedUserRanking)) in \(habitName)! Now's your chance to pull ahead."
                 }
 
-            // Otherwise if the followe user has logged at least one habit:
+            // Otherwise if the followed user has logged at least one habit:
             } else if followedUserLoggedHabits.count > 0 {
                 // Get a (deterministic) arbitrary habit name
                 let habitName = followedUserLoggedHabits.sorted().first!
@@ -473,5 +486,144 @@ class HomeCollectionViewController: UICollectionViewController {
         itemsBySection[.followedUsers] = followedUserItems
         
         dataSource.applySnapshotUsing(sectionIDs: sectionIDs, itemsBySection: itemsBySection)
+    }
+}
+
+//MARK: Extension of the HomeCollectionViewController
+
+extension HomeCollectionViewController {
+    
+    override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+
+            updateTimer?.invalidate()
+
+            let user = getUser(indexPath: indexPath)
+            let habit = getHabit(indexPath: indexPath)
+            
+            let identifier = "\(user.name)" as NSString
+            
+        return UIContextMenuConfiguration(identifier: identifier, previewProvider: nil) { [self] suggestedAction in
+            
+            //create an actions for looking into user detail
+            let userDetail = userDetailContextAction(user: user)
+            
+            //create an actions for looking into habit detail
+            let habitDetail = habitDetailContextAction(habit: habit)
+            
+            //create an actions for follow and unfollow
+            let follow = followAndUnfollowUserContextAction(user: user)
+            
+            let cancel = cancelContextAction()
+            
+            return UIMenu(title: "", children: [userDetail, habitDetail, follow, cancel])
+        }
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.section == 0 {
+            let user = getUser(indexPath: indexPath)
+            showUserDetailViewController(user: user)
+        } else if indexPath.section == 1 {
+            let habit = getHabit(indexPath: indexPath)
+            showHabitDetailViewController(habit: habit)
+        }
+    }
+    
+    func userDetailContextAction(user: User) -> UIAction {
+        let detail = UIAction(title: "Check \(user.name) profile", image: UIImage(systemName: "person.crop.rectangle")) { action in
+            self.showUserDetailViewController(user: user)
+        }
+        return detail
+    }
+    
+    func followAndUnfollowUserContextAction(user: User) -> UIAction {
+        var image: UIImage
+        let title: String
+        if !model.followedUsers.contains(user) {
+            image = UIImage(systemName: "person.fill.checkmark")!
+            title = "Follow: \(user.name)"
+        } else {
+            image = UIImage(systemName: "person.fill.xmark")!
+            title = "Unfollow: \(user.name)"
+        }
+        
+        let follow = UIAction(title: title , image: image) { [self] action in
+            Settings.shared.toggleFollowed(user: user)
+            update()
+            updateTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+                self.update()
+            }
+        }
+        return follow
+    }
+    
+    func habitDetailContextAction(habit: Habit) -> UIAction {
+        let detail = UIAction(title: "Give a look at \(habit.name) habit", image: UIImage(systemName: "figure.mind.and.body")) { action in
+            self.showHabitDetailViewController(habit: habit)
+        }
+        return detail
+    }
+    
+    func cancelContextAction() -> UIAction {
+        let cancel = UIAction(title: "Cancel", image: UIImage(systemName: "xmark")) { [self] action in
+            updateTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+                self.update()
+            }
+        }
+        return cancel
+    }
+    
+    func getHabit(indexPath: IndexPath) -> Habit {
+        let items = self.dataSource.itemIdentifier(for: indexPath)
+        var habitName: String = ""
+        if case .followedUser(_ , let habit) = items {
+            let components = habit.components(separatedBy: "in ")
+            if components.count > 1 {
+                habitName = components[1].components(separatedBy: ".").first!
+            }
+        } else if case .leaderboardHabit(let name , _, _) = items {
+            habitName = name
+        }
+       
+        let habit = model.habitsByName.values.filter { $0.name == habitName }.map { $0 }.first!
+        return habit
+    }
+    
+    func getUser(indexPath: IndexPath) -> User {
+        let items = self.dataSource.itemIdentifier(for: indexPath)
+        var userName: String = " "
+        var user: User!
+        if case .leaderboardHabit(_ , let item, _) = items {
+            
+            if let lastIndex = item!.lastIndex(of: " ") {
+                userName = String(item!.prefix(upTo: lastIndex))
+                user = model.users.filter { $0.name == userName }.map { $0 }.first!
+            }
+        } else if case .followedUser(let item, _) = items {
+            user = item
+        }
+      
+        return user
+    }
+    
+    func showUserDetailViewController(user: User) {
+        guard let vc = storyboard?.instantiateViewController(identifier: "UserDetail", creator: { coder in
+         
+            let isFollowed = Settings.shared.followedUserIDs.contains("\(user.id)")
+            return UserDetailViewController(coder: coder, user: user, isFollowed: isFollowed)
+        }) else {
+            fatalError("Failed to load UserDetailViewController from story board")
+        }
+        
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func showHabitDetailViewController(habit: Habit) {
+        guard let vc = storyboard?.instantiateViewController(identifier: "HabitDetail", creator: { coder in
+            return HabitDetailViewController(coder: coder, habit: habit)
+        }) else {
+            fatalError("Failed to load HabitDetailViewController from story board")
+        }
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
