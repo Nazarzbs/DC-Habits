@@ -35,6 +35,10 @@
 		CEA7004A29B3C0F80000D803 /* LeaderboardHabitCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA7004929B3C0F80000D803 /* LeaderboardHabitCollectionViewCell.swift */; };
 		CEA7004C29B3CA5B0000D803 /* FollowedUserCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA7004B29B3CA5B0000D803 /* FollowedUserCollectionViewCell.swift */; };
 		CEA7005029B3DB280000D803 /* CombinedStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA7004F29B3DB280000D803 /* CombinedStatistics.swift */; };
+		CECAA3E429D0F1DB00C5AE99 /* coolShapes.riv in Resources */ = {isa = PBXBuildFile; fileRef = CECAA3E329D0F1DA00C5AE99 /* coolShapes.riv */; };
+		CECAA3EA29D22CB700C5AE99 /* shapes.riv in Resources */ = {isa = PBXBuildFile; fileRef = CECAA3E929D22CB700C5AE99 /* shapes.riv */; };
+		CECAA3EC29D382A600C5AE99 /* HomeGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECAA3EB29D382A600C5AE99 /* HomeGradientView.swift */; };
+		CED7791829D09C7200813F73 /* RiveRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = CED7791729D09C7200813F73 /* RiveRuntime */; };
 		CEE38C6029BE05FA005175E8 /* BadgeSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE38C5F29BE05FA005175E8 /* BadgeSupplementaryView.swift */; };
 /* End PBXBuildFile section */
 
@@ -69,6 +73,9 @@
 		CEA7004929B3C0F80000D803 /* LeaderboardHabitCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardHabitCollectionViewCell.swift; sourceTree = SOURCE_ROOT; };
 		CEA7004B29B3CA5B0000D803 /* FollowedUserCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowedUserCollectionViewCell.swift; sourceTree = SOURCE_ROOT; };
 		CEA7004F29B3DB280000D803 /* CombinedStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombinedStatistics.swift; sourceTree = SOURCE_ROOT; };
+		CECAA3E329D0F1DA00C5AE99 /* coolShapes.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = coolShapes.riv; sourceTree = "<group>"; };
+		CECAA3E929D22CB700C5AE99 /* shapes.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = shapes.riv; sourceTree = "<group>"; };
+		CECAA3EB29D382A600C5AE99 /* HomeGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeGradientView.swift; sourceTree = "<group>"; };
 		CEE38C5F29BE05FA005175E8 /* BadgeSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeSupplementaryView.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -77,6 +84,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CED7791829D09C7200813F73 /* RiveRuntime in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,6 +110,7 @@
 		CE57618E29A679B00009B7EE /* DC Habits */ = {
 			isa = PBXGroup;
 			children = (
+				CECAA3EB29D382A600C5AE99 /* HomeGradientView.swift */,
 				CEE38C5F29BE05FA005175E8 /* BadgeSupplementaryView.swift */,
 				CEA7004F29B3DB280000D803 /* CombinedStatistics.swift */,
 				CEA7004B29B3CA5B0000D803 /* FollowedUserCollectionViewCell.swift */,
@@ -132,8 +141,18 @@
 				CE57619829A679B20009B7EE /* Assets.xcassets */,
 				CE57619A29A679B20009B7EE /* LaunchScreen.storyboard */,
 				CE57619D29A679B20009B7EE /* Info.plist */,
+				CECAA3D229D0EA9500C5AE99 /* RiveAssets */,
 			);
 			path = "DC Habits";
+			sourceTree = "<group>";
+		};
+		CECAA3D229D0EA9500C5AE99 /* RiveAssets */ = {
+			isa = PBXGroup;
+			children = (
+				CECAA3E929D22CB700C5AE99 /* shapes.riv */,
+				CECAA3E329D0F1DA00C5AE99 /* coolShapes.riv */,
+			);
+			path = RiveAssets;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -152,6 +171,9 @@
 			dependencies = (
 			);
 			name = "DC Habits";
+			packageProductDependencies = (
+				CED7791729D09C7200813F73 /* RiveRuntime */,
+			);
 			productName = "DC Habits";
 			productReference = CE57618C29A679B00009B7EE /* DC Habits.app */;
 			productType = "com.apple.product-type.application";
@@ -180,6 +202,9 @@
 				Base,
 			);
 			mainGroup = CE57618329A679B00009B7EE;
+			packageReferences = (
+				CED7791629D09C7200813F73 /* XCRemoteSwiftPackageReference "rive-ios" */,
+			);
 			productRefGroup = CE57618D29A679B00009B7EE /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -197,6 +222,8 @@
 				CE57619C29A679B20009B7EE /* LaunchScreen.storyboard in Resources */,
 				CE57619929A679B20009B7EE /* Assets.xcassets in Resources */,
 				CE57619729A679B00009B7EE /* Main.storyboard in Resources */,
+				CECAA3EA29D22CB700C5AE99 /* shapes.riv in Resources */,
+				CECAA3E429D0F1DB00C5AE99 /* coolShapes.riv in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -207,6 +234,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CECAA3EC29D382A600C5AE99 /* HomeGradientView.swift in Sources */,
 				CEA7004229AD4CF40000D803 /* UserCount.swift in Sources */,
 				CE013DEA29A6B30F005467EC /* HomeCollectionViewController.swift in Sources */,
 				CEA7004829B3A8290000D803 /* LoggedHabit.swift in Sources */,
@@ -450,6 +478,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		CED7791629D09C7200813F73 /* XCRemoteSwiftPackageReference "rive-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/rive-app/rive-ios";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		CED7791729D09C7200813F73 /* RiveRuntime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CED7791629D09C7200813F73 /* XCRemoteSwiftPackageReference "rive-ios" */;
+			productName = RiveRuntime;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = CE57618429A679B00009B7EE /* Project object */;
 }

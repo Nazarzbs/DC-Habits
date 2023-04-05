@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RiveRuntime
 
 enum SupplementaryItemType {
     case collectionSupplementaryView
@@ -35,7 +36,7 @@ extension SupplementaryItem {
 
 class SectionBackgroundView: UICollectionReusableView {
     override func didMoveToSuperview() {
-        backgroundColor = .systemGray6
+        backgroundColor = .clear
     }
 }
 
@@ -44,10 +45,12 @@ class HomeCollectionViewController: UICollectionViewController {
     // keep track of async tasks so they can be cancelled when appropriate.
     var userRequestTask: Task<Void, Never>? = nil
     var habitRequestTask: Task<Void, Never>? = nil
+    var imageRequestTask: Task<Void, Never>? = nil
     var combinedStatisticsRequestTask: Task<Void, Never>? = nil
     deinit {
         userRequestTask?.cancel()
         habitRequestTask?.cancel()
+        imageRequestTask?.cancel()
         combinedStatisticsRequestTask?.cancel()
     }
     
@@ -93,13 +96,13 @@ class HomeCollectionViewController: UICollectionViewController {
 
         enum Item: Hashable {
             case leaderboardHabit(name: String, leadingUserRanking: String?, secondaryUserRanking: String?)
-            case followedUser(_ user: User, message: String)
+            case followedUser(_ user: User, message: String, userImage: UIImage)
             
             func hash(into hasher: inout Hasher) {
                 switch self {
                 case .leaderboardHabit(let name, _, _):
                     hasher.combine(name)
-                case .followedUser(let User, _):
+                case .followedUser(let User, _, _):
                     hasher.combine(User)
                 }
             }
@@ -108,7 +111,7 @@ class HomeCollectionViewController: UICollectionViewController {
                 switch (lhs, rhs) {
                 case (.leaderboardHabit(let lName, _, _), .leaderboardHabit(let rName, _, _)):
                     return lName == rName
-                case (.followedUser(let lUser, _), .followedUser(let rUser, _)):
+                case (.followedUser(let lUser, _, _), .followedUser(let rUser, _, _)):
                     return lUser == rUser
                 default:
                     return false
@@ -120,6 +123,7 @@ class HomeCollectionViewController: UICollectionViewController {
     struct Model {
         var usersByID = [String: User]()
         var habitsByName = [String: Habit]()
+        var usersImage = [String: UIImage]()
         var habitStatistics = [HabitStatistics]()
         var userStatistics = [UserStatistics]()
 
@@ -154,17 +158,31 @@ class HomeCollectionViewController: UICollectionViewController {
     var dataSource: DataSourceType!
     
     var updateTimer: Timer?
+    
+    @IBOutlet weak var riveView: RiveView!
+    
+//    var simpleVM = RiveViewModel(webURL: "https://cdn.rive.app/animations/off_road_car_v7.riv")
+//    var simpleVM = RiveViewModel(fileName: "shapes")
+    
+    
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationController?.navigationBar.barTintColor = UIColor(red: 23 / 255, green: 41 / 255, blue: 173 / 255, alpha: 1)
+//        simpleVM.setView(riveView)
+
         dataSource = createDataSource()
+                         
         collectionView.dataSource = dataSource
         collectionView.collectionViewLayout = createLayout()
         
         for supplementaryView in SupplementaryView.allCases {
             supplementaryView.register(on: collectionView)
         }
+        
+        imageRequest()
 
         userRequestTask = Task {
             if let users = try? await UserRequest().send() {
@@ -189,7 +207,7 @@ class HomeCollectionViewController: UICollectionViewController {
         super.viewWillAppear(animated)
 
         update()
-
+       imageRequest()
         updateTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             self.update()
         }
@@ -211,24 +229,26 @@ class HomeCollectionViewController: UICollectionViewController {
                 cell.leaderLabel.text = leadingUserRanking
                 cell.secondaryLabel.text = secondaryUserRanking
                 
-                cell.contentView.backgroundColor = UIColor(displayP3Red: 255.0 / 255.0, green: 255.0 / 255.0, blue: 153 / 255.0, alpha: 1)
                 cell.contentView.layer.cornerRadius = 8
                 cell.layer.shadowRadius = 3
-                cell.layer.shadowColor = UIColor.systemGray3.cgColor
-                cell.layer.shadowOffset = CGSize(width: 0, height: 5)
-                cell.layer.shadowOpacity = 5
+                cell.layer.shadowColor = UIColor.systemIndigo.cgColor
+                cell.layer.shadowOffset = CGSize(width: 0, height: 2)
+                cell.layer.shadowOpacity = 1
                 cell.layer.masksToBounds = false
                 
                 return cell
-            case .followedUser(let user, let message):
+            case .followedUser(let user, let message, let userImage):
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FollowedUser", for: indexPath) as! FollowedUserCollectionViewCell
                 cell.primaryTextLabel.text = user.name
                 cell.secondaryTextLabel.text = message
-                cell.contentView.backgroundColor = UIColor(displayP3Red: 248.0 / 255.0, green: 248.0 / 255.0, blue: 255.0 / 255.0, alpha: 1)
-                cell.contentView.layer.cornerRadius = 8
-                cell.layer.shadowColor = UIColor.systemGray3.cgColor
-                cell.layer.shadowOffset = CGSize(width: 0, height: 5)
-                cell.layer.shadowOpacity = 5
+                cell.usersImage.image = userImage
+                cell.usersImage.layer.cornerRadius = min(cell.usersImage.frame.width, cell.usersImage.frame.height) / 2
+                cell.usersImage.clipsToBounds = true
+                cell.contentView.layer.cornerRadius = 15
+                cell.layer.shadowRadius = 3
+                cell.layer.shadowColor = UIColor.systemIndigo.cgColor
+                cell.layer.shadowOffset = CGSize(width: 0, height: 2)
+                cell.layer.shadowOpacity = 1
                 cell.layer.masksToBounds = false
                 if indexPath.item == collectionView.numberOfItems(inSection: indexPath.section) - 1 {
                     cell.separatorLineView.isHidden = true
@@ -296,14 +316,14 @@ class HomeCollectionViewController: UICollectionViewController {
 
                 return leaderboardSection
             case .followedUsers:
-                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(80))
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100))
                 let followedUserItem = NSCollectionLayoutItem(layoutSize: itemSize)
                 
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(80))
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100))
                 
                 let followedUserGroup = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: followedUserItem, count: 1)
                 
-                followedUserGroup.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12)
+                followedUserGroup.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 8)
                 followedUserGroup.interItemSpacing = .fixed(25)
 
                 let followedUserSection = NSCollectionLayoutSection(group: followedUserGroup)
@@ -423,11 +443,13 @@ class HomeCollectionViewController: UICollectionViewController {
         let currentUserLoggedHabits = loggedHabitNames(for: model.currentUser)
         let favoriteLoggedHabits = Set(model.favoriteHabits.map { $0.name }).intersection(currentUserLoggedHabits)
 
+       
         // Loop through all the followed users.
         for followedUser in model.followedUsers.sorted(by: { $0.name < $1.name }) {
             let message: String
-            
             let followedUserLoggedHabits = loggedHabitNames(for: followedUser)
+          
+            var userImage = model.usersImage[followedUser.id] ?? UIImage(systemName: "person")
 
             // If the users have a habit in common:
             let commonLoggedHabits = followedUserLoggedHabits.intersection(currentUserLoggedHabits)
@@ -479,7 +501,7 @@ class HomeCollectionViewController: UICollectionViewController {
                 message = "This user doesn't seem to have done much yet. Check in to see if they need any help getting started."
             }
             
-            followedUserItems.append(.followedUser(followedUser, message: message))
+            followedUserItems.append(.followedUser(followedUser, message: message, userImage: userImage!))
         }
         
         sectionIDs.append(.followedUsers)
@@ -529,6 +551,20 @@ extension HomeCollectionViewController {
         }
     }
     
+    func imageRequest() {
+        
+        for followedUser in Settings.shared.followedUserIDs {
+            
+            imageRequestTask = Task {
+                if let image = try? await ImageRequest(imageID: followedUser).send()  {
+                    
+                    model.usersImage[followedUser] = image
+                }
+            }
+            imageRequestTask = nil
+        }
+    }
+
     func userDetailContextAction(user: User) -> UIAction {
         let detail = UIAction(title: "Check \(user.name) profile", image: UIImage(systemName: "person.crop.rectangle")) { action in
             self.showUserDetailViewController(user: user)
@@ -547,14 +583,15 @@ extension HomeCollectionViewController {
             title = "Unfollow: \(user.name)"
         }
         
-        let follow = UIAction(title: title , image: image) { [self] action in
+        let followOrUnfollow = UIAction(title: title , image: image) { [self] action in
             Settings.shared.toggleFollowed(user: user)
             update()
+            imageRequest()
             updateTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
                 self.update()
             }
         }
-        return follow
+        return followOrUnfollow
     }
     
     func habitDetailContextAction(habit: Habit) -> UIAction {
@@ -576,7 +613,7 @@ extension HomeCollectionViewController {
     func getHabit(indexPath: IndexPath) -> Habit {
         let items = self.dataSource.itemIdentifier(for: indexPath)
         var habitName: String = ""
-        if case .followedUser(_ , let habit) = items {
+        if case .followedUser(_ , let habit, _) = items {
             let components = habit.components(separatedBy: "in ")
             if components.count > 1 {
                 habitName = components[1].components(separatedBy: ".").first!
@@ -599,7 +636,7 @@ extension HomeCollectionViewController {
                 userName = String(item!.prefix(upTo: lastIndex))
                 user = model.users.filter { $0.name == userName }.map { $0 }.first!
             }
-        } else if case .followedUser(let item, _) = items {
+        } else if case .followedUser(let item, _, _) = items {
             user = item
         }
       

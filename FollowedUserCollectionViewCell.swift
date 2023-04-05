@@ -9,6 +9,7 @@ import UIKit
 
 class FollowedUserCollectionViewCell: UICollectionViewCell {
     
+    @IBOutlet var usersImage: UIImageView!
     @IBOutlet var primaryTextLabel: UILabel!
     @IBOutlet var secondaryTextLabel: UILabel!
     
