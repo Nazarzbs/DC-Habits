@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="FBS-3G-79C">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="FBS-3G-79C">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -313,7 +314,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Max-ly-fYy">
-                                <rect key="frame" x="16" y="123" width="361" height="156"/>
+                                <rect key="frame" x="16" y="123" width="361" height="207"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="i5D-Ub-L7z">
                                         <rect key="frame" x="0.0" y="0.0" width="361" height="118"/>
@@ -339,10 +340,21 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="HAD-LJ-fz6">
+                                        <rect key="frame" x="0.0" y="176" width="361" height="32"/>
+                                        <segments>
+                                            <segment title="Category"/>
+                                            <segment title="Count"/>
+                                            <segment title="Rank"/>
+                                        </segments>
+                                        <connections>
+                                            <action selector="didChangeSegment:" destination="V7U-qJ-7uR" eventType="valueChanged" id="Sch-2a-sF9"/>
+                                        </connections>
+                                    </segmentedControl>
                                 </subviews>
                             </stackView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="SXR-hN-2MX">
-                                <rect key="frame" x="0.0" y="299" width="393" height="470"/>
+                                <rect key="frame" x="0.0" y="330" width="393" height="439"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="NNI-jr-YD6">
                                     <size key="itemSize" width="393" height="128"/>
@@ -371,7 +383,7 @@
                             <constraint firstItem="2Gm-li-nPr" firstAttribute="bottom" secondItem="SXR-hN-2MX" secondAttribute="bottom" id="Szp-ns-i4c"/>
                             <constraint firstItem="Max-ly-fYy" firstAttribute="top" secondItem="2Gm-li-nPr" secondAttribute="top" constant="20" id="bwA-5j-QKX"/>
                             <constraint firstItem="SXR-hN-2MX" firstAttribute="leading" secondItem="2Gm-li-nPr" secondAttribute="leading" id="d34-qx-cnU"/>
-                            <constraint firstItem="SXR-hN-2MX" firstAttribute="top" secondItem="Max-ly-fYy" secondAttribute="bottom" constant="20" id="px2-1J-MQY"/>
+                            <constraint firstItem="SXR-hN-2MX" firstAttribute="top" secondItem="Max-ly-fYy" secondAttribute="bottom" id="px2-1J-MQY"/>
                             <constraint firstItem="Max-ly-fYy" firstAttribute="leading" secondItem="2Gm-li-nPr" secondAttribute="leading" constant="16" id="qeI-0I-ejl"/>
                             <constraint firstItem="2Gm-li-nPr" firstAttribute="trailing" secondItem="Max-ly-fYy" secondAttribute="trailing" constant="16" id="t3R-EZ-XwB"/>
                         </constraints>
@@ -381,6 +393,7 @@
                         <outlet property="bioLabel" destination="q0x-mV-Gk1" id="Sbi-dH-2rl"/>
                         <outlet property="collectionView" destination="SXR-hN-2MX" id="r5l-du-hmi"/>
                         <outlet property="profileImageView" destination="fy5-GD-efE" id="YKb-5X-OVJ"/>
+                        <outlet property="segmentControl" destination="HAD-LJ-fz6" id="hmz-AV-3d4"/>
                         <outlet property="userNameLabel" destination="0Bo-bq-nYx" id="nqR-Gt-9iQ"/>
                     </connections>
                 </viewController>

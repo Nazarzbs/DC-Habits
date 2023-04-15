@@ -9,9 +9,9 @@ import UIKit
 
 class UserDetailViewController: UIViewController {
     
-
-    
     typealias DataSourseType = UICollectionViewDiffableDataSource<ViewModel.Section, ViewModel.Item>
+    
+    typealias DataSourceTypeForSortedHabit = UICollectionViewDiffableDataSource<ViewModelForHabitSortedByCountAndRank.SectionForHabitSortedByCountAndRank, ViewModelForHabitSortedByCountAndRank.ItemByCount>
     
     enum SectionHeader: String {
         case kind = "SectinHeader"
@@ -44,6 +44,10 @@ class UserDetailViewController: UIViewController {
     struct Model {
         var userStats: UserStatistics?
         var leadingStats: UserStatistics?
+        
+        var habitStatistics = [HabitStatistics]()
+        
+        var habitRank: HabitRank?
     }
     
     var updateTimer: Timer?
@@ -52,6 +56,8 @@ class UserDetailViewController: UIViewController {
     var userStatisticsRequestTask:Task<Void, Never>? = nil
     var habitLeadStatisticsRequestTask:Task<Void, Never>? = nil
     
+    var habitStatisticsRequestTask: Task<Void, Never>? = nil
+    
     deinit {
         imageRequestTask?.cancel()
         userStatisticsRequestTask?.cancel()
@@ -59,12 +65,15 @@ class UserDetailViewController: UIViewController {
     }
     
     var dataSource: DataSourseType!
+    var dataSourceForHabitSortedByCountAndRank: DataSourceTypeForSortedHabit!
+
     var model = Model()
     var user: User!
+    var previousSection: Int! = 0
     
     var barButton: UIBarButtonItem!
     var isFollowed: Bool
-  
+    
     func toggleFollowed() -> UIImage {
         switch isFollowed {
         case true:
@@ -79,6 +88,9 @@ class UserDetailViewController: UIViewController {
     @IBOutlet var bioLabel: UILabel!
     @IBOutlet var collectionView: UICollectionView!
     
+    @IBOutlet var segmentControl: UISegmentedControl!
+    
+//MARK: viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         barButton = UIBarButtonItem(image: toggleFollowed(), style: .done, target: self, action: #selector(toggleFollowedButtonTapped))
@@ -109,7 +121,6 @@ class UserDetailViewController: UIViewController {
         navigationItem.scrollEdgeAppearance = navBarAppearence
         
         update()
-        
     }
     
     required init?(coder: NSCoder) {
@@ -130,6 +141,7 @@ class UserDetailViewController: UIViewController {
         }
     
     func update() {
+        
         userStatisticsRequestTask?.cancel()
         userStatisticsRequestTask = Task {
             if let userStats = try? await UserStatisticsRequest(userIDs: [user.id]).send(), userStats.count > 0 {
@@ -137,8 +149,7 @@ class UserDetailViewController: UIViewController {
             } else {
                 self.model.userStats = nil
             }
-            self.updateCollectionView()
-            
+
             userStatisticsRequestTask = nil
         }
         
@@ -150,8 +161,30 @@ class UserDetailViewController: UIViewController {
             } else {
                 self.model.leadingStats = nil
             }
-            self.updateCollectionView()
+            
             habitLeadStatisticsRequestTask = nil
+        }
+        
+        habitStatisticsRequestTask = Task {
+            if let combinedStatistics = try? await CombinedStatisticsRequest().send() {
+                self.model.habitStatistics = combinedStatistics.habitStatistics
+            }
+           
+            habitStatisticsRequestTask = nil
+        }
+        
+        if let segmentControl = segmentControl {
+            let selectedSegmentIndex = segmentControl.selectedSegmentIndex
+            switch selectedSegmentIndex {
+            case 0:
+                //category
+                self.updateCollectionView()
+            case 1, 2:
+                //current position
+                self.updateCollectionViewForHabitSortedByCountAndRank()
+            default:
+                break
+            }
         }
     }
     
@@ -174,18 +207,22 @@ class UserDetailViewController: UIViewController {
     }
     
     func createDataSource() -> DataSourseType {
-        let dataSource = DataSourseType(collectionView: collectionView) {
+        let dataSource = DataSourseType(collectionView: collectionView) { [self]
             (collectionView, indexPath, habitStat) -> UICollectionViewCell? in
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HabitCount", for: indexPath) as! UICollectionViewListCell
             
             var content = UIListContentConfiguration.subtitleCell()
             content.text = habitStat.habit.name
             content.secondaryText = "\(habitStat.count)"
-            
+           
             content.prefersSideBySideTextAndSecondaryText = true
             content.textProperties.font = .preferredFont(forTextStyle: .headline)
             content.secondaryTextProperties.font = .preferredFont(forTextStyle: .body)
             cell.contentConfiguration = content
+            
+            cell.layer.cornerRadius = 5
+            cell.contentView.layer.backgroundColor = getCategoryColor(hue: habitStat.habit.category.color.hue)
+           
             return cell
         }
         
@@ -207,17 +244,18 @@ class UserDetailViewController: UIViewController {
     func createLayout() -> UICollectionViewCompositionalLayout {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 12)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 6, bottom: 0, trailing: 6)
         
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(44))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
+        group.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0)
         
         let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(36))
+
         let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: SectionHeader.kind.identifier, alignment: .top)
         sectionHeader.pinToVisibleBounds = true
-        
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 0, bottom: 20, trailing: 0)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 0, bottom: 20, trailing: 0)
         section.boundarySupplementaryItems = [sectionHeader]
         
         return UICollectionViewCompositionalLayout(section: section)
@@ -225,13 +263,13 @@ class UserDetailViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        update()
-        
-        updateTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+        self.update()
+            
+        updateTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [self] _ in
+            
             self.update()
+            }
         }
-    }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -239,4 +277,130 @@ class UserDetailViewController: UIViewController {
         updateTimer?.invalidate()
         updateTimer = nil
     }
+    
+    @IBAction func didChangeSegment(_ sender: UISegmentedControl) {
+        if sender.selectedSegmentIndex == 0 {
+            dataSource = createDataSource()
+            collectionView.dataSource = dataSource
+            collectionView.collectionViewLayout = createLayout()
+            update()
+            previousSection = 0
+        } else if sender.selectedSegmentIndex == 1 {
+        
+            if previousSection == 0 {
+                dataSourceForHabitSortedByCountAndRank = crateDataSourceForHabitSortedByCountAndRank()
+                collectionView.dataSource = dataSourceForHabitSortedByCountAndRank
+                collectionView.collectionViewLayout = createLayoutForHabitSortedByCountAndByRank()
+                self.update()
+                previousSection = 1
+            }
+        } else if sender.selectedSegmentIndex == 2 {
+            if previousSection == 0 {
+                dataSourceForHabitSortedByCountAndRank = crateDataSourceForHabitSortedByCountAndRank()
+                collectionView.dataSource = dataSourceForHabitSortedByCountAndRank
+                collectionView.collectionViewLayout = createLayoutForHabitSortedByCountAndByRank()
+                self.update()
+                previousSection = 2
+            }
+        }
+    }
 }
+
+//MARK: EXTENTION
+extension UserDetailViewController {
+    enum ViewModelForHabitSortedByCountAndRank {
+        enum SectionForHabitSortedByCountAndRank {
+            case second
+        }
+        typealias ItemByCount = HabitRank
+    }
+    
+    func crateDataSourceForHabitSortedByCountAndRank() -> DataSourceTypeForSortedHabit {
+        let dataSource = DataSourceTypeForSortedHabit(collectionView: collectionView) { [self] (collectionView, indexPath, habitRank) -> UICollectionViewCell? in
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HabitCount", for: indexPath) as! UICollectionViewListCell
+            
+            var content = UIListContentConfiguration.sidebarSubtitleCell()
+            
+            content.text = "#\(habitRank.rank) in \(habitRank.habitCount.habit.name)"
+            
+            content.secondaryText = "with score of \(habitRank.habitCount.count)"
+           
+            content.prefersSideBySideTextAndSecondaryText = true
+            content.textProperties.font = .preferredFont(forTextStyle: .headline)
+            content.secondaryTextProperties.font = .preferredFont(forTextStyle: .body)
+            cell.layer.cornerRadius = 5
+            cell.contentConfiguration = content
+            
+            cell.contentView.layer.backgroundColor = getCategoryColor(hue: habitRank.habitCount.habit.category.color.hue)
+           
+            cell.contentView.layer.shadowColor = getCategoryColor(hue: habitRank.habitCount.habit.category.color.hue)
+           
+            return cell
+        }
+        
+        return dataSource
+    }
+    
+    func createLayoutForHabitSortedByCountAndByRank() -> UICollectionViewCompositionalLayout {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1.1))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 8, bottom: 6, trailing: 8)
+            
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(50))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets =  NSDirectionalEdgeInsets(top: 6, leading: 0, bottom: 0, trailing: 0)
+        
+        return UICollectionViewCompositionalLayout(section: section)
+    }
+    
+    func updateCollectionViewForHabitSortedByCountAndRank() {
+        guard let userStatistics = model.userStats?.habitCounts else { return }
+        
+        var snapshot = NSDiffableDataSourceSnapshot<ViewModelForHabitSortedByCountAndRank.SectionForHabitSortedByCountAndRank, ViewModelForHabitSortedByCountAndRank.ItemByCount>()
+        
+        snapshot.appendSections([.second])
+
+        var items = [HabitRank]()
+        
+        for statistics in userStatistics.sorted(by: { $0.habit > $1.habit }) {
+            let habitStats = model.habitStatistics.first { $0.habit.name == statistics.habit.name }!
+           
+            let rankedUserCounts = habitStats.userCounts.sorted { $0.count > $1.count }
+            
+            let currentUserRanking = rankedUserCounts.firstIndex { $0.user == model.userStats?.user}!
+            
+            items.append(HabitRank(habitCount: statistics, rank: Int(currentUserRanking + 1)))
+        }
+        
+        var sortedItems = [HabitRank]()
+      
+        if let segmentControl = segmentControl {
+            let selectedSegmentIndex = segmentControl.selectedSegmentIndex
+    
+            switch selectedSegmentIndex {
+            case 2:
+                sortedItems = items.sorted { $0.rank < $1.rank }               
+            case 1:
+                sortedItems = items.sorted { $0.habitCount.count > $1.habitCount.count }
+            default:
+                break
+            }
+        }
+        
+        snapshot.appendItems(sortedItems)
+        snapshot.reloadItems(sortedItems)
+                        
+        dataSourceForHabitSortedByCountAndRank.apply(snapshot, animatingDifferences: true, completion: nil)
+    }
+    
+    func getCategoryColor(hue: Double) -> CGColor {
+        let colorSaturation = Color(hue: hue, saturation: 0.5, brightness: 1)
+        let color = colorSaturation.uiColor.cgColor
+        let uiColor = UIColor(cgColor: color)
+        let cgColor = uiColor.cgColor
+        return cgColor
+    }
+}
+
