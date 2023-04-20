@@ -37,6 +37,15 @@ class UserDetailViewController: UIViewController {
                     return category1.name > category2.name
                 }
             }
+            
+            var sectionColor: UIColor {
+                switch self {
+                case .leading:
+                    return .systemGray4
+                case .category(let category):
+                    return category.color.uiColor
+                }
+            }
         }
         typealias Item = HabitCount
     }
@@ -136,6 +145,7 @@ class UserDetailViewController: UIViewController {
     @objc func toggleFollowedButtonTapped() {
         
         Settings.shared.toggleFollowed(user: user)
+        
         isFollowed.toggle()
         barButton.image = toggleFollowed()
         }
@@ -207,7 +217,7 @@ class UserDetailViewController: UIViewController {
     }
     
     func createDataSource() -> DataSourseType {
-        let dataSource = DataSourseType(collectionView: collectionView) { [self]
+        let dataSource = DataSourseType(collectionView: collectionView) {
             (collectionView, indexPath, habitStat) -> UICollectionViewCell? in
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HabitCount", for: indexPath) as! UICollectionViewListCell
             
@@ -221,7 +231,7 @@ class UserDetailViewController: UIViewController {
             cell.contentConfiguration = content
             
             cell.layer.cornerRadius = 5
-            cell.contentView.layer.backgroundColor = getCategoryColor(hue: habitStat.habit.category.color.hue)
+            cell.contentView.layer.backgroundColor = self.getCategoryColor(hue: habitStat.habit.category.color.hue)
            
             return cell
         }
@@ -236,6 +246,8 @@ class UserDetailViewController: UIViewController {
             case .category(let category):
                 header.nameLabel.text = category.name
             }
+            let color = section.sectionColor.withAlphaComponent(0.2)
+            header.backgroundColor = color
             return header
         }
         return dataSource

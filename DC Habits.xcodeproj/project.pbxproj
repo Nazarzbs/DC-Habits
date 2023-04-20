@@ -18,6 +18,7 @@
 		CE013DFA29A6CDFA005467EC /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE013DF929A6CDFA005467EC /* Color.swift */; };
 		CE013DFC29A7C9DB005467EC /* APIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE013DFB29A7C9DB005467EC /* APIRequest.swift */; };
 		CE013DFE29A80876005467EC /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE013DFD29A80876005467EC /* APIService.swift */; };
+		CE08F17429EC6173005A7E01 /* UserColectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE08F17329EC6173005A7E01 /* UserColectionViewCell.swift */; };
 		CE57619029A679B00009B7EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE57618F29A679B00009B7EE /* AppDelegate.swift */; };
 		CE57619229A679B00009B7EE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE57619129A679B00009B7EE /* SceneDelegate.swift */; };
 		CE57619729A679B00009B7EE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE57619529A679B00009B7EE /* Main.storyboard */; };
@@ -55,6 +56,7 @@
 		CE013DF929A6CDFA005467EC /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = SOURCE_ROOT; };
 		CE013DFB29A7C9DB005467EC /* APIRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRequest.swift; sourceTree = SOURCE_ROOT; };
 		CE013DFD29A80876005467EC /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = SOURCE_ROOT; };
+		CE08F17329EC6173005A7E01 /* UserColectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserColectionViewCell.swift; sourceTree = "<group>"; };
 		CE57618C29A679B00009B7EE /* DC Habits.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "DC Habits.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE57618F29A679B00009B7EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CE57619129A679B00009B7EE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -118,8 +120,6 @@
 				CEA7004B29B3CA5B0000D803 /* FollowedUserCollectionViewCell.swift */,
 				CEA7004929B3C0F80000D803 /* LeaderboardHabitCollectionViewCell.swift */,
 				CEA7004729B3A8290000D803 /* LoggedHabit.swift */,
-				CEA7004129AD4CF40000D803 /* UserCount.swift */,
-				CEA7003F29AD4C6B0000D803 /* HabitStatistics.swift */,
 				CE87443529A956CC00903B6F /* Settings.swift */,
 				CE013DFD29A80876005467EC /* APIService.swift */,
 				CE013DFB29A7C9DB005467EC /* APIRequest.swift */,
@@ -128,22 +128,25 @@
 				CE013DF529A6CCD4005467EC /* Habit.swift */,
 				CE013DF129A6C190005467EC /* HabitDetailViewController.swift */,
 				CE013DEF29A6B35A005467EC /* LogHabitCollectionViewController.swift */,
-				CE013DED29A6B33D005467EC /* UserCollectionViewController.swift */,
 				CE013DEB29A6B328005467EC /* HabitCollectionViewController.swift */,
 				CE013DE929A6B30F005467EC /* HomeCollectionViewController.swift */,
 				CE57618F29A679B00009B7EE /* AppDelegate.swift */,
 				CE57619129A679B00009B7EE /* SceneDelegate.swift */,
-				CE57619529A679B00009B7EE /* Main.storyboard */,
 				CEA7004529B2828B0000D803 /* HabitCount.swift */,
+				CEA7004129AD4CF40000D803 /* UserCount.swift */,
 				CEFB0D6C29EA032C004FD9DC /* HabitRank.swift */,
 				CEA7003D29ABC8F20000D803 /* User.swift */,
+				CEA7003F29AD4C6B0000D803 /* HabitStatistics.swift */,
 				CEA7004329B282250000D803 /* UserStatistics.swift */,
 				CEA7003929AA98130000D803 /* UICollectionViewDiffableDataSource+ViewModel.swift */,
 				CEA7003B29AAB2B80000D803 /* NamedSectionHeaderView.swift */,
 				CE013DF329A6C1A7005467EC /* UserDetailViewController.swift */,
 				CE57619829A679B20009B7EE /* Assets.xcassets */,
-				CE57619A29A679B20009B7EE /* LaunchScreen.storyboard */,
 				CE57619D29A679B20009B7EE /* Info.plist */,
+				CE08F17329EC6173005A7E01 /* UserColectionViewCell.swift */,
+				CE013DED29A6B33D005467EC /* UserCollectionViewController.swift */,
+				CE57619A29A679B20009B7EE /* LaunchScreen.storyboard */,
+				CE57619529A679B00009B7EE /* Main.storyboard */,
 				CECAA3D229D0EA9500C5AE99 /* RiveAssets */,
 			);
 			path = "DC Habits";
@@ -246,6 +249,7 @@
 				CE013DFA29A6CDFA005467EC /* Color.swift in Sources */,
 				CE013DEE29A6B33D005467EC /* UserCollectionViewController.swift in Sources */,
 				CEA7003C29AAB2B80000D803 /* NamedSectionHeaderView.swift in Sources */,
+				CE08F17429EC6173005A7E01 /* UserColectionViewCell.swift in Sources */,
 				CE87443629A956CC00903B6F /* Settings.swift in Sources */,
 				CEA7004C29B3CA5B0000D803 /* FollowedUserCollectionViewCell.swift in Sources */,
 				CEA7003E29ABC8F20000D803 /* User.swift in Sources */,
