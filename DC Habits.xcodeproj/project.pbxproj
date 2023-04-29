@@ -36,6 +36,7 @@
 		CEA7004A29B3C0F80000D803 /* LeaderboardHabitCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA7004929B3C0F80000D803 /* LeaderboardHabitCollectionViewCell.swift */; };
 		CEA7004C29B3CA5B0000D803 /* FollowedUserCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA7004B29B3CA5B0000D803 /* FollowedUserCollectionViewCell.swift */; };
 		CEA7005029B3DB280000D803 /* CombinedStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA7004F29B3DB280000D803 /* CombinedStatistics.swift */; };
+		CEBFCA0029FD944C00984BDB /* HabitDetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEBFC9FF29FD944C00984BDB /* HabitDetailCollectionViewCell.swift */; };
 		CECAA3E429D0F1DB00C5AE99 /* coolShapes.riv in Resources */ = {isa = PBXBuildFile; fileRef = CECAA3E329D0F1DA00C5AE99 /* coolShapes.riv */; };
 		CECAA3EA29D22CB700C5AE99 /* shapes.riv in Resources */ = {isa = PBXBuildFile; fileRef = CECAA3E929D22CB700C5AE99 /* shapes.riv */; };
 		CECAA3EC29D382A600C5AE99 /* HomeGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECAA3EB29D382A600C5AE99 /* HomeGradientView.swift */; };
@@ -76,6 +77,7 @@
 		CEA7004929B3C0F80000D803 /* LeaderboardHabitCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardHabitCollectionViewCell.swift; sourceTree = SOURCE_ROOT; };
 		CEA7004B29B3CA5B0000D803 /* FollowedUserCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowedUserCollectionViewCell.swift; sourceTree = SOURCE_ROOT; };
 		CEA7004F29B3DB280000D803 /* CombinedStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombinedStatistics.swift; sourceTree = SOURCE_ROOT; };
+		CEBFC9FF29FD944C00984BDB /* HabitDetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitDetailCollectionViewCell.swift; sourceTree = "<group>"; };
 		CECAA3E329D0F1DA00C5AE99 /* coolShapes.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = coolShapes.riv; sourceTree = "<group>"; };
 		CECAA3E929D22CB700C5AE99 /* shapes.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = shapes.riv; sourceTree = "<group>"; };
 		CECAA3EB29D382A600C5AE99 /* HomeGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeGradientView.swift; sourceTree = "<group>"; };
@@ -132,6 +134,7 @@
 				CE013DE929A6B30F005467EC /* HomeCollectionViewController.swift */,
 				CE57618F29A679B00009B7EE /* AppDelegate.swift */,
 				CE57619129A679B00009B7EE /* SceneDelegate.swift */,
+				CEBFC9FF29FD944C00984BDB /* HabitDetailCollectionViewCell.swift */,
 				CEA7004529B2828B0000D803 /* HabitCount.swift */,
 				CEA7004129AD4CF40000D803 /* UserCount.swift */,
 				CEFB0D6C29EA032C004FD9DC /* HabitRank.swift */,
@@ -246,6 +249,7 @@
 				CEA7004829B3A8290000D803 /* LoggedHabit.swift in Sources */,
 				CE013DF829A6CD16005467EC /* Category.swift in Sources */,
 				CEA7003A29AA98130000D803 /* UICollectionViewDiffableDataSource+ViewModel.swift in Sources */,
+				CEBFCA0029FD944C00984BDB /* HabitDetailCollectionViewCell.swift in Sources */,
 				CE013DFA29A6CDFA005467EC /* Color.swift in Sources */,
 				CE013DEE29A6B33D005467EC /* UserCollectionViewController.swift in Sources */,
 				CEA7003C29AAB2B80000D803 /* NamedSectionHeaderView.swift in Sources */,

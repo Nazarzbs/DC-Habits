@@ -296,7 +296,7 @@
                     <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="157-Bx-VfN"/>
                     <connections>
                         <outlet property="categoryLabel" destination="f8L-eA-3u0" id="4Id-uP-HYs"/>
-                        <outlet property="collectionView" destination="27w-6B-xvL" id="THE-vt-wYO"/>
+                        <outlet property="collectionView" destination="27w-6B-xvL" id="5WK-XF-VzV"/>
                         <outlet property="infoLabel" destination="KOp-s5-K9r" id="9nD-ZY-UEX"/>
                         <outlet property="nameLabel" destination="5kQ-oI-2IZ" id="a46-DH-H0h"/>
                     </connections>
