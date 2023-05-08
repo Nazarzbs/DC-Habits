@@ -213,6 +213,7 @@ class HabitDetailViewController: UIViewController {
                case .multiple(let usersStat):
                    cell.leftLabel.text = "\(usersStat.stats.count) more have the same count of: "
                    cell.rightLabel.text = "\(usersStat.stats.first!.count)"
+                   cell.leftLabel.textAlignment = .center
                    
                    cell.leftLabel.font = .preferredFont(forTextStyle: .body)
                    cell.rightLabel.font = .preferredFont(forTextStyle: .body)

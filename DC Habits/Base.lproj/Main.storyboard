@@ -24,34 +24,6 @@
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
-                        <view key="backgroundView" contentMode="scaleToFill" id="tZP-gu-Awk">
-                            <rect key="frame" x="0.0" y="-103" width="393" height="852"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <subviews>
-                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.90000000000000002" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Nature" translatesAutoresizingMaskIntoConstraints="NO" id="4kF-V2-OvO">
-                                    <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                                </imageView>
-                                <visualEffectView opaque="NO" alpha="0.55000000000000004" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pDE-uN-NNA">
-                                    <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="U0y-r0-Wyq">
-                                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    </view>
-                                    <blurEffect style="systemChromeMaterialDark"/>
-                                </visualEffectView>
-                            </subviews>
-                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            <constraints>
-                                <constraint firstItem="pDE-uN-NNA" firstAttribute="leading" secondItem="tZP-gu-Awk" secondAttribute="leading" id="1HP-Pf-sI7"/>
-                                <constraint firstItem="pDE-uN-NNA" firstAttribute="trailing" secondItem="4kF-V2-OvO" secondAttribute="trailing" id="1wQ-Sh-gU2"/>
-                                <constraint firstItem="4kF-V2-OvO" firstAttribute="leading" secondItem="pDE-uN-NNA" secondAttribute="leading" id="PC5-Je-xP0"/>
-                                <constraint firstItem="4kF-V2-OvO" firstAttribute="top" secondItem="pDE-uN-NNA" secondAttribute="top" id="Qxs-1p-Lb6"/>
-                                <constraint firstItem="4kF-V2-OvO" firstAttribute="centerY" secondItem="tZP-gu-Awk" secondAttribute="centerY" id="T94-9m-BJd"/>
-                                <constraint firstItem="4kF-V2-OvO" firstAttribute="centerX" secondItem="tZP-gu-Awk" secondAttribute="centerX" id="Vqh-f6-iex"/>
-                                <constraint firstItem="4kF-V2-OvO" firstAttribute="bottom" secondItem="pDE-uN-NNA" secondAttribute="bottom" id="lyV-eL-2vb"/>
-                                <constraint firstItem="4kF-V2-OvO" firstAttribute="top" secondItem="tZP-gu-Awk" secondAttribute="top" id="xCX-Yf-bPK"/>
-                            </constraints>
-                        </view>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="LeaderboardHabit" id="ieT-K7-biX" customClass="LeaderboardHabitCollectionViewCell" customModule="DC_Habits" customModuleProvider="target">
                                 <rect key="frame" x="39" y="0.0" width="315" height="172"/>
@@ -405,7 +377,7 @@
         <scene sceneID="dNI-2B-dE4">
             <objects>
                 <collectionViewController id="m12-K7-ba3" customClass="UserCollectionViewController" customModule="DC_Habits" customModuleProvider="target" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="u0m-pB-GPj">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" prefetchingEnabled="NO" id="u0m-pB-GPj">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -577,7 +549,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Nature" width="1125" height="2436"/>
         <image name="checkmark.square.fill" catalog="system" width="128" height="114"/>
         <image name="house.fill" catalog="system" width="128" height="104"/>
         <image name="person.2.fill" catalog="system" width="128" height="81"/>

@@ -41,12 +41,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to undo the changes made on entering the background.
     }
 
+    
+    
     func sceneDidEnterBackground(_ scene: UIScene) {
-        // Called as the scene transitions from the foreground to the background.
-        // Use this method to save data, release shared resources, and store enough scene-specific state information
-        // to restore the scene back to its current state.
+        //In the WWDC talk, the presenter uses applicationDidEnterBackground in the app delegate instead of the Scene Delegate to schedule the background task. applicationDidEnterBackground is the old API for the old lifecycle of apps prior to iOS 13. In iOS 13, I wasn’t able to get my app to call that delegate method at all, so we needed to use the scene delegate instead
+
+        print("Backgrounded")
+        (UIApplication.shared.delegate as! AppDelegate).scheduleAppRefresh()
+        (UIApplication.shared.delegate as! AppDelegate).scheduleAppProcessingTask()
     }
-
-
 }
 

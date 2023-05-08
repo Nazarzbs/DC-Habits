@@ -246,7 +246,7 @@ class UserDetailViewController: UIViewController {
             case .category(let category):
                 header.nameLabel.text = category.name
             }
-            let color = section.sectionColor.withAlphaComponent(0.2)
+            let color = section.sectionColor.withAlphaComponent(1)
             header.backgroundColor = color
             return header
         }
@@ -258,11 +258,12 @@ class UserDetailViewController: UIViewController {
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 6, bottom: 0, trailing: 6)
         
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(44))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(50))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
-        group.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0)
+        group.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0)
         
         let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(36))
+        
 
         let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: SectionHeader.kind.identifier, alignment: .top)
         sectionHeader.pinToVisibleBounds = true
@@ -408,7 +409,7 @@ extension UserDetailViewController {
     }
     
     func getCategoryColor(hue: Double) -> CGColor {
-        let colorSaturation = Color(hue: hue, saturation: 0.5, brightness: 1)
+        let colorSaturation = Color(hue: hue, saturation: 0.2, brightness: 1)
         let color = colorSaturation.uiColor.cgColor
         let uiColor = UIColor(cgColor: color)
         let cgColor = uiColor.cgColor

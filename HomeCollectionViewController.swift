@@ -7,6 +7,7 @@
 
 import UIKit
 import RiveRuntime
+import UserNotifications
 
 enum SupplementaryItemType {
     case collectionSupplementaryView
@@ -126,6 +127,8 @@ class HomeCollectionViewController: UICollectionViewController {
         var usersImage = [String: UIImage]()
         var habitStatistics = [HabitStatistics]()
         var userStatistics = [UserStatistics]()
+        var currentUserIsOvertakenByFollowedUser = [User:Bool]()
+       
 
         var currentUser: User {
             return Settings.shared.currentUser
@@ -157,9 +160,14 @@ class HomeCollectionViewController: UICollectionViewController {
     var model = Model()
     var dataSource: DataSourceType!
     
+    
+    static let shared = HomeCollectionViewController()
+    
     var updateTimer: Timer?
     
-    @IBOutlet weak var riveView: RiveView!
+//    @IBOutlet weak var riveView: RiveView!
+    
+    let notificationCenter = UNUserNotificationCenter.current()
     
 //    var simpleVM = RiveViewModel(webURL: "https://cdn.rive.app/animations/off_road_car_v7.riv")
 //    var simpleVM = RiveViewModel(fileName: "shapes")
@@ -170,8 +178,13 @@ class HomeCollectionViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.navigationBar.barTintColor = UIColor(red: 23 / 255, green: 41 / 255, blue: 173 / 255, alpha: 1)
 //        simpleVM.setView(riveView)
+        
+        notificationCenter.requestAuthorization(options: [.alert, .sound]) { (permissionGranted, error) in
+            if (!permissionGranted) {
+                print("Permission Denied")
+            }
+        }
 
         dataSource = createDataSource()
                          
@@ -205,10 +218,10 @@ class HomeCollectionViewController: UICollectionViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
+        imageRequest()
         update()
-       imageRequest()
-        updateTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+     
+        updateTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { _ in
             self.update()
         }
     }
@@ -351,7 +364,7 @@ class HomeCollectionViewController: UICollectionViewController {
                 self.model.habitStatistics = []
             }
             self.updateCollectionView()
-            
+        
             combinedStatisticsRequestTask = nil
         }
     }
@@ -371,9 +384,7 @@ class HomeCollectionViewController: UICollectionViewController {
         
         let leaderboardItems = model.habitStatistics.filter { statistic in
             return model.favoriteHabits.contains { $0.name == statistic.habit.name }
-        }
-        .sorted { $0.habit.name < $1.habit.name }
-        .reduce(into: [ViewModel.Item]()) { partial, statistic in
+        }.sorted { $0.habit.name < $1.habit.name }.reduce(into: [ViewModel.Item]()) { partial, statistic in
             // Rank the user counts from highest to lowest.
             let rankedUserCounts = statistic.userCounts.sorted { $0.count > $1.count }
             
@@ -443,13 +454,14 @@ class HomeCollectionViewController: UICollectionViewController {
         let currentUserLoggedHabits = loggedHabitNames(for: model.currentUser)
         let favoriteLoggedHabits = Set(model.favoriteHabits.map { $0.name }).intersection(currentUserLoggedHabits)
 
-       
         // Loop through all the followed users.
+      
         for followedUser in model.followedUsers.sorted(by: { $0.name < $1.name }) {
+           
             let message: String
             let followedUserLoggedHabits = loggedHabitNames(for: followedUser)
           
-            var userImage = model.usersImage[followedUser.id] ?? UIImage(systemName: "person")
+            let userImage = model.usersImage[followedUser.id] ?? UIImage(systemName: "person")
 
             // If the users have a habit in common:
             let commonLoggedHabits = followedUserLoggedHabits.intersection(currentUserLoggedHabits)
@@ -457,6 +469,7 @@ class HomeCollectionViewController: UICollectionViewController {
             if commonLoggedHabits.count > 0 {
                 // Pick the habit to focus on.
                 let habitName: String
+                //get habits that is your favorite and in your followed users.
                 let commonFavoriteLoggedHabits = favoriteLoggedHabits.intersection(commonLoggedHabits)
 
                 if commonFavoriteLoggedHabits.count > 0 {
@@ -464,19 +477,39 @@ class HomeCollectionViewController: UICollectionViewController {
                 } else {
                     habitName = commonLoggedHabits.sorted().first!
                 }
-
                 // Get the full statistics (all the user counts) for that habit
                 let habitStats = model.habitStatistics.first { $0.habit.name == habitName }!
-
+               
                 // Get the ranking for each user
                 let rankedUserCounts = habitStats.userCounts.sorted { $0.count > $1.count }
                 let currentUserRanking = rankedUserCounts.firstIndex { $0.user == model.currentUser }!
                 let followedUserRanking = rankedUserCounts.firstIndex { $0.user == followedUser }!
-
+                
                 // Construct the message depending on who's leading.
                 if currentUserRanking < followedUserRanking {
+                    if model.currentUserIsOvertakenByFollowedUser[followedUser] == true {
+                        print("\(followedUser.name) now is behind you in \(habitName)!")
+                        userNotificationLocal(notificationTitle: "\(followedUser.name) now is behind you in \(habitName)!")
+
+                    } else {
+                        print("Keep going!")
+                    }
+                    
+                    model.currentUserIsOvertakenByFollowedUser[followedUser] = false
+                  
                     message = "Currently #\(ordinalString(from: followedUserRanking)), behind you (#\(ordinalString(from: currentUserRanking))) in \(habitName).\nSend them a friendly reminder!"
                 } else if currentUserRanking > followedUserRanking {
+                    
+                    if model.currentUserIsOvertakenByFollowedUser[followedUser] == false {
+                        print("\(followedUser.name) is overtaking you in \(habitName)!")
+                        userNotificationLocal(notificationTitle: "\(followedUser.name) is overtaking you in \(habitName)!")
+
+                    } else {
+                        print("Keep going!")
+                    }
+                    
+                    model.currentUserIsOvertakenByFollowedUser[followedUser] = true
+                  
                     message = "Currently #\(ordinalString(from: followedUserRanking)), ahead of you (#\(ordinalString(from: currentUserRanking))) in \(habitName).\nYou might catch up with a little extra effort!"
                 } else {
                     message = "You're tied at \(ordinalString(from: followedUserRanking)) in \(habitName)! Now's your chance to pull ahead."
@@ -587,7 +620,7 @@ extension HomeCollectionViewController {
             Settings.shared.toggleFollowed(user: user)
             update()
             imageRequest()
-            updateTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            updateTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { _ in
                 self.update()
             }
         }
@@ -603,7 +636,7 @@ extension HomeCollectionViewController {
     
     func cancelContextAction() -> UIAction {
         let cancel = UIAction(title: "Cancel", image: UIImage(systemName: "xmark")) { [self] action in
-            updateTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            updateTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { _ in
                 self.update()
             }
         }
@@ -663,4 +696,42 @@ extension HomeCollectionViewController {
         }
         navigationController?.pushViewController(vc, animated: true)
     }
-}
+    
+    func userNotificationLocal(notificationTitle: String) {
+    
+            self.notificationCenter.getNotificationSettings { (settings) in
+                DispatchQueue.main.async {
+                if (settings.authorizationStatus == .authorized) {
+                    let content = UNMutableNotificationContent()
+                    content.title = "Notification"
+                    
+                    let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
+                    
+                    self.notificationCenter.add(request) { (error) in
+                        if (error != nil) {
+                            print("Error" + error.debugDescription)
+                            return
+                        }
+                    }
+                    let ac = UIAlertController(title: notificationTitle, message: "", preferredStyle: .alert)
+                    ac.addAction(UIAlertAction(title: "OK",style: .default))
+                    ac.addAction(UIAlertAction(title: "Cancel",style: .cancel))
+                    self.present(ac, animated: true)
+                } else {
+                    let ac = UIAlertController(title: "Enable Notifications?", message: "To use this feature you must enable notification in settings", preferredStyle: .alert)
+                    let goToSettings = UIAlertAction(title: "Settings", style: .default) { (_) in
+                        guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else {
+                            return }
+                        if (UIApplication.shared.canOpenURL(settingsURL)) {
+                            UIApplication.shared.open(settingsURL)
+                        }
+                    }
+                    ac.addAction(goToSettings)
+                    ac.addAction(UIAlertAction(title: "Cancel",style: .default))
+                    self.present(ac, animated: true)
+                    }
+                }
+            }
+        }
+    }
+

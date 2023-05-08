@@ -20,30 +20,17 @@ class UserCollectionViewController: UICollectionViewController {
     }
     
     static let badgeElementKind = "badge-element-kind"
-    
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        navigationController?.navigationBar.barTintColor = UIColor(red: 23 / 255, green: 41 / 255, blue: 193 / 255, alpha: 1)
-        
-        let backgroundImage = UIImage(named: "Nature")
-        let backgroundImageView = UIImageView(image: backgroundImage)
-        backgroundImageView.alpha = 0.6
-        backgroundImageView.frame = collectionView.frame
-
-        view.addSubview(backgroundImageView)
                 
         configureHierarchy()
         dataSource = createDataSource()
         collectionView.dataSource = dataSource
         collectionView.collectionViewLayout = createLayout()
-            
-        collectionView.backgroundColor = UIColor.clear
-        
-        update()
-        
         imageRequest()
+        update()
     }
 
     typealias DataSourceType = UICollectionViewDiffableDataSource<ViewModel.Section, ViewModel.Item>
@@ -91,6 +78,7 @@ class UserCollectionViewController: UICollectionViewController {
                
             } else {
                 self.model.usersByID = [:]
+                imageRequest()
             }
            
             usersRequestTask = nil
