@@ -23,7 +23,7 @@ class UserColectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.font = .systemFont(ofSize: 18)
         label.numberOfLines = 0
-        label.textColor = UIColor.init(white: 1, alpha: 1)
+        label.textColor = .systemGroupedBackground
         label.textAlignment = .center
         label.text = "Error"
         label.sizeToFit()

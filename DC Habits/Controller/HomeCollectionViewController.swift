@@ -157,7 +157,16 @@ class HomeCollectionViewController: UICollectionViewController {
 
     var items: [HomeCollectionViewController.ViewModel.Item]!
     
-    var model = Model()
+    var model = Model() {
+        didSet {
+            spinner.stopAnimating()
+            collectionView.isHidden = false
+            UIView.animate(withDuration: 0.3) {
+                self.collectionView.alpha = 1
+            }
+        }
+    }
+       
     var dataSource: DataSourceType!
     
     
@@ -165,20 +174,31 @@ class HomeCollectionViewController: UICollectionViewController {
     
     var updateTimer: Timer?
     
-//    @IBOutlet weak var riveView: RiveView!
-    
     let notificationCenter = UNUserNotificationCenter.current()
     
-//    var simpleVM = RiveViewModel(webURL: "https://cdn.rive.app/animations/off_road_car_v7.riv")
-//    var simpleVM = RiveViewModel(fileName: "shapes")
+    private let spinner: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView()
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        spinner.hidesWhenStopped = true
+        return spinner
+    }()
     
+    private func addConstraints() {
+        NSLayoutConstraint.activate([
+            spinner.heightAnchor.constraint(equalToConstant: 100),
+            spinner.widthAnchor.constraint(equalToConstant: 100),
+            spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+        ])
+    }
     
-
-
+    //MARK: - ViewDidload
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        simpleVM.setView(riveView)
+        view.addSubview(spinner)
+        spinner.startAnimating()
+        addConstraints()
         
         notificationCenter.requestAuthorization(options: [.alert, .sound]) { (permissionGranted, error) in
             if (!permissionGranted) {
@@ -187,7 +207,8 @@ class HomeCollectionViewController: UICollectionViewController {
         }
 
         dataSource = createDataSource()
-                         
+        collectionView.alpha = 0
+        collectionView.isHidden = true
         collectionView.dataSource = dataSource
         collectionView.collectionViewLayout = createLayout()
         

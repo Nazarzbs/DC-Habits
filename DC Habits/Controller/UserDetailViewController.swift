@@ -99,9 +99,30 @@ class UserDetailViewController: UIViewController {
     
     @IBOutlet var segmentControl: UISegmentedControl!
     
-//MARK: viewDidLoad
+    private let spinner: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView()
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        spinner.hidesWhenStopped = true
+        return spinner
+    }()
+    
+    private func addConstraints() {
+        NSLayoutConstraint.activate([
+            spinner.heightAnchor.constraint(equalToConstant: 100),
+            spinner.widthAnchor.constraint(equalToConstant: 100),
+            spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 100),
+        ])
+    }
+    
+//MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.addSubview(spinner)
+        spinner.startAnimating()
+        addConstraints()
+        
         barButton = UIBarButtonItem(image: toggleFollowed(), style: .done, target: self, action: #selector(toggleFollowedButtonTapped))
        
         navigationItem.rightBarButtonItem = barButton
@@ -119,6 +140,8 @@ class UserDetailViewController: UIViewController {
         
         dataSource = createDataSource()
         collectionView.dataSource = dataSource
+        collectionView.alpha = 0
+        collectionView.isHidden = true
         collectionView.collectionViewLayout = createLayout()
         view.backgroundColor = user.color?.uiColor ?? .white
                 
@@ -214,6 +237,12 @@ class UserDetailViewController: UIViewController {
         let sectionIDs = itemsBySection.keys.sorted()
         
         dataSource.applySnapshotUsing(sectionIDs: sectionIDs, itemsBySection: itemsBySection)
+      
+            spinner.stopAnimating()
+            collectionView.isHidden = false
+            UIView.animate(withDuration: 0.3) {
+                self.collectionView.alpha = 1
+        }
     }
     
     func createDataSource() -> DataSourseType {
@@ -278,9 +307,9 @@ class UserDetailViewController: UIViewController {
         super.viewWillAppear(animated)
         self.update()
             
-        updateTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [self] _ in
+        updateTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
             
-            self.update()
+            self?.update()
             }
         }
     
@@ -304,7 +333,7 @@ class UserDetailViewController: UIViewController {
                 dataSourceForHabitSortedByCountAndRank = crateDataSourceForHabitSortedByCountAndRank()
                 collectionView.dataSource = dataSourceForHabitSortedByCountAndRank
                 collectionView.collectionViewLayout = createLayoutForHabitSortedByCountAndByRank()
-                self.update()
+                update()
                 previousSection = 1
             }
         } else if sender.selectedSegmentIndex == 2 {
@@ -312,7 +341,7 @@ class UserDetailViewController: UIViewController {
                 dataSourceForHabitSortedByCountAndRank = crateDataSourceForHabitSortedByCountAndRank()
                 collectionView.dataSource = dataSourceForHabitSortedByCountAndRank
                 collectionView.collectionViewLayout = createLayoutForHabitSortedByCountAndByRank()
-                self.update()
+                update()
                 previousSection = 2
             }
         }

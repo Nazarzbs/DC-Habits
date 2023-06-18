@@ -19,6 +19,7 @@
 		CE013DFC29A7C9DB005467EC /* APIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE013DFB29A7C9DB005467EC /* APIRequest.swift */; };
 		CE013DFE29A80876005467EC /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE013DFD29A80876005467EC /* APIService.swift */; };
 		CE08F17429EC6173005A7E01 /* UserColectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE08F17329EC6173005A7E01 /* UserColectionViewCell.swift */; };
+		CE28492C2A3F174B002D9922 /* UserStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE28492B2A3F174B002D9922 /* UserStatistics.swift */; };
 		CE57619029A679B00009B7EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE57618F29A679B00009B7EE /* AppDelegate.swift */; };
 		CE57619229A679B00009B7EE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE57619129A679B00009B7EE /* SceneDelegate.swift */; };
 		CE57619729A679B00009B7EE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE57619529A679B00009B7EE /* Main.storyboard */; };
@@ -30,7 +31,6 @@
 		CEA7003E29ABC8F20000D803 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA7003D29ABC8F20000D803 /* User.swift */; };
 		CEA7004029AD4C6B0000D803 /* HabitStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA7003F29AD4C6B0000D803 /* HabitStatistics.swift */; };
 		CEA7004229AD4CF40000D803 /* UserCount.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA7004129AD4CF40000D803 /* UserCount.swift */; };
-		CEA7004429B282250000D803 /* UserStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA7004329B282250000D803 /* UserStatistics.swift */; };
 		CEA7004629B2828B0000D803 /* HabitCount.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA7004529B2828B0000D803 /* HabitCount.swift */; };
 		CEA7004829B3A8290000D803 /* LoggedHabit.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA7004729B3A8290000D803 /* LoggedHabit.swift */; };
 		CEA7004A29B3C0F80000D803 /* LeaderboardHabitCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA7004929B3C0F80000D803 /* LeaderboardHabitCollectionViewCell.swift */; };
@@ -44,18 +44,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		CE013DE929A6B30F005467EC /* HomeCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewController.swift; sourceTree = SOURCE_ROOT; };
-		CE013DEB29A6B328005467EC /* HabitCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitCollectionViewController.swift; sourceTree = SOURCE_ROOT; };
-		CE013DED29A6B33D005467EC /* UserCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCollectionViewController.swift; sourceTree = SOURCE_ROOT; };
-		CE013DEF29A6B35A005467EC /* LogHabitCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogHabitCollectionViewController.swift; sourceTree = SOURCE_ROOT; };
-		CE013DF129A6C190005467EC /* HabitDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitDetailViewController.swift; sourceTree = SOURCE_ROOT; };
-		CE013DF329A6C1A7005467EC /* UserDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailViewController.swift; sourceTree = SOURCE_ROOT; };
-		CE013DF529A6CCD4005467EC /* Habit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Habit.swift; sourceTree = SOURCE_ROOT; };
-		CE013DF729A6CD16005467EC /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = SOURCE_ROOT; };
-		CE013DF929A6CDFA005467EC /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = SOURCE_ROOT; };
+		CE013DE929A6B30F005467EC /* HomeCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HomeCollectionViewController.swift; path = "DC Habits/Controller/HomeCollectionViewController.swift"; sourceTree = SOURCE_ROOT; };
+		CE013DEB29A6B328005467EC /* HabitCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HabitCollectionViewController.swift; path = "DC Habits/Controller/HabitCollectionViewController.swift"; sourceTree = SOURCE_ROOT; };
+		CE013DED29A6B33D005467EC /* UserCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UserCollectionViewController.swift; path = "DC Habits/Controller/UserCollectionViewController.swift"; sourceTree = SOURCE_ROOT; };
+		CE013DEF29A6B35A005467EC /* LogHabitCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LogHabitCollectionViewController.swift; path = "DC Habits/Controller/LogHabitCollectionViewController.swift"; sourceTree = SOURCE_ROOT; };
+		CE013DF129A6C190005467EC /* HabitDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HabitDetailViewController.swift; path = "DC Habits/Controller/HabitDetailViewController.swift"; sourceTree = SOURCE_ROOT; };
+		CE013DF329A6C1A7005467EC /* UserDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UserDetailViewController.swift; path = "DC Habits/Controller/UserDetailViewController.swift"; sourceTree = SOURCE_ROOT; };
+		CE013DF529A6CCD4005467EC /* Habit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Habit.swift; path = "DC Habits/Model/Habit.swift"; sourceTree = SOURCE_ROOT; };
+		CE013DF729A6CD16005467EC /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Category.swift; path = "DC Habits/Model/Category.swift"; sourceTree = SOURCE_ROOT; };
+		CE013DF929A6CDFA005467EC /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Color.swift; path = "DC Habits/Model/Color.swift"; sourceTree = SOURCE_ROOT; };
 		CE013DFB29A7C9DB005467EC /* APIRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRequest.swift; sourceTree = SOURCE_ROOT; };
 		CE013DFD29A80876005467EC /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = SOURCE_ROOT; };
 		CE08F17329EC6173005A7E01 /* UserColectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserColectionViewCell.swift; sourceTree = "<group>"; };
+		CE28492B2A3F174B002D9922 /* UserStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStatistics.swift; sourceTree = "<group>"; };
 		CE57618C29A679B00009B7EE /* DC Habits.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "DC Habits.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE57618F29A679B00009B7EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CE57619129A679B00009B7EE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -64,20 +65,19 @@
 		CE57619B29A679B20009B7EE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CE57619D29A679B20009B7EE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CE87443529A956CC00903B6F /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = SOURCE_ROOT; };
-		CEA7003929AA98130000D803 /* UICollectionViewDiffableDataSource+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionViewDiffableDataSource+ViewModel.swift"; sourceTree = SOURCE_ROOT; };
-		CEA7003B29AAB2B80000D803 /* NamedSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamedSectionHeaderView.swift; sourceTree = SOURCE_ROOT; };
-		CEA7003D29ABC8F20000D803 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = SOURCE_ROOT; };
-		CEA7003F29AD4C6B0000D803 /* HabitStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitStatistics.swift; sourceTree = SOURCE_ROOT; };
-		CEA7004129AD4CF40000D803 /* UserCount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCount.swift; sourceTree = SOURCE_ROOT; };
-		CEA7004329B282250000D803 /* UserStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UserStatistics.swift; path = "../../../../Презентації/UserStatistics.swift"; sourceTree = "<group>"; };
-		CEA7004529B2828B0000D803 /* HabitCount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitCount.swift; sourceTree = SOURCE_ROOT; };
-		CEA7004729B3A8290000D803 /* LoggedHabit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggedHabit.swift; sourceTree = SOURCE_ROOT; };
-		CEA7004929B3C0F80000D803 /* LeaderboardHabitCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardHabitCollectionViewCell.swift; sourceTree = SOURCE_ROOT; };
-		CEA7004B29B3CA5B0000D803 /* FollowedUserCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowedUserCollectionViewCell.swift; sourceTree = SOURCE_ROOT; };
-		CEA7004F29B3DB280000D803 /* CombinedStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombinedStatistics.swift; sourceTree = SOURCE_ROOT; };
+		CEA7003929AA98130000D803 /* UICollectionViewDiffableDataSource+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UICollectionViewDiffableDataSource+ViewModel.swift"; path = "DC Habits/Model/UICollectionViewDiffableDataSource+ViewModel.swift"; sourceTree = SOURCE_ROOT; };
+		CEA7003B29AAB2B80000D803 /* NamedSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NamedSectionHeaderView.swift; path = "DC Habits/View/NamedSectionHeaderView.swift"; sourceTree = SOURCE_ROOT; };
+		CEA7003D29ABC8F20000D803 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = User.swift; path = "DC Habits/Model/User.swift"; sourceTree = SOURCE_ROOT; };
+		CEA7003F29AD4C6B0000D803 /* HabitStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HabitStatistics.swift; path = "DC Habits/Model/HabitStatistics.swift"; sourceTree = SOURCE_ROOT; };
+		CEA7004129AD4CF40000D803 /* UserCount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UserCount.swift; path = "DC Habits/Model/UserCount.swift"; sourceTree = SOURCE_ROOT; };
+		CEA7004529B2828B0000D803 /* HabitCount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HabitCount.swift; path = "DC Habits/Model/HabitCount.swift"; sourceTree = SOURCE_ROOT; };
+		CEA7004729B3A8290000D803 /* LoggedHabit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LoggedHabit.swift; path = "DC Habits/Model/LoggedHabit.swift"; sourceTree = SOURCE_ROOT; };
+		CEA7004929B3C0F80000D803 /* LeaderboardHabitCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LeaderboardHabitCollectionViewCell.swift; path = "DC Habits/View/VIewCell/LeaderboardHabitCollectionViewCell.swift"; sourceTree = SOURCE_ROOT; };
+		CEA7004B29B3CA5B0000D803 /* FollowedUserCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FollowedUserCollectionViewCell.swift; path = "DC Habits/View/VIewCell/FollowedUserCollectionViewCell.swift"; sourceTree = SOURCE_ROOT; };
+		CEA7004F29B3DB280000D803 /* CombinedStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CombinedStatistics.swift; path = "DC Habits/Model/CombinedStatistics.swift"; sourceTree = SOURCE_ROOT; };
 		CEBFC9FF29FD944C00984BDB /* HabitDetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitDetailCollectionViewCell.swift; sourceTree = "<group>"; };
 		CECAA3EB29D382A600C5AE99 /* HomeGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeGradientView.swift; sourceTree = "<group>"; };
-		CEE38C5F29BE05FA005175E8 /* BadgeSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeSupplementaryView.swift; sourceTree = SOURCE_ROOT; };
+		CEE38C5F29BE05FA005175E8 /* BadgeSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BadgeSupplementaryView.swift; path = "DC Habits/View/BadgeSupplementaryView.swift"; sourceTree = SOURCE_ROOT; };
 		CEFB0D6C29EA032C004FD9DC /* HabitRank.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitRank.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -93,6 +93,60 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CE28492D2A3F188E002D9922 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				CE013DE929A6B30F005467EC /* HomeCollectionViewController.swift */,
+				CE013DED29A6B33D005467EC /* UserCollectionViewController.swift */,
+				CE013DF329A6C1A7005467EC /* UserDetailViewController.swift */,
+				CE013DF129A6C190005467EC /* HabitDetailViewController.swift */,
+				CE013DEF29A6B35A005467EC /* LogHabitCollectionViewController.swift */,
+				CE013DEB29A6B328005467EC /* HabitCollectionViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		CE28492E2A3F18A9002D9922 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				CE2849342A3F4A09002D9922 /* VIewCell */,
+				CEE38C5F29BE05FA005175E8 /* BadgeSupplementaryView.swift */,
+				CEA7003B29AAB2B80000D803 /* NamedSectionHeaderView.swift */,
+				CECAA3EB29D382A600C5AE99 /* HomeGradientView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		CE28492F2A3F18CD002D9922 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				CEA7004529B2828B0000D803 /* HabitCount.swift */,
+				CE013DF529A6CCD4005467EC /* Habit.swift */,
+				CEA7003D29ABC8F20000D803 /* User.swift */,
+				CE013DF729A6CD16005467EC /* Category.swift */,
+				CE013DF929A6CDFA005467EC /* Color.swift */,
+				CEA7004729B3A8290000D803 /* LoggedHabit.swift */,
+				CE28492B2A3F174B002D9922 /* UserStatistics.swift */,
+				CEA7004F29B3DB280000D803 /* CombinedStatistics.swift */,
+				CEA7003F29AD4C6B0000D803 /* HabitStatistics.swift */,
+				CEFB0D6C29EA032C004FD9DC /* HabitRank.swift */,
+				CEA7004129AD4CF40000D803 /* UserCount.swift */,
+				CEA7003929AA98130000D803 /* UICollectionViewDiffableDataSource+ViewModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		CE2849342A3F4A09002D9922 /* VIewCell */ = {
+			isa = PBXGroup;
+			children = (
+				CEBFC9FF29FD944C00984BDB /* HabitDetailCollectionViewCell.swift */,
+				CEA7004929B3C0F80000D803 /* LeaderboardHabitCollectionViewCell.swift */,
+				CE08F17329EC6173005A7E01 /* UserColectionViewCell.swift */,
+				CEA7004B29B3CA5B0000D803 /* FollowedUserCollectionViewCell.swift */,
+			);
+			path = VIewCell;
+			sourceTree = "<group>";
+		};
 		CE57618329A679B00009B7EE = {
 			isa = PBXGroup;
 			children = (
@@ -114,36 +168,14 @@
 			children = (
 				CE57618F29A679B00009B7EE /* AppDelegate.swift */,
 				CE57619129A679B00009B7EE /* SceneDelegate.swift */,
-				CECAA3EB29D382A600C5AE99 /* HomeGradientView.swift */,
-				CEE38C5F29BE05FA005175E8 /* BadgeSupplementaryView.swift */,
-				CEA7004F29B3DB280000D803 /* CombinedStatistics.swift */,
-				CEA7004B29B3CA5B0000D803 /* FollowedUserCollectionViewCell.swift */,
-				CEA7004929B3C0F80000D803 /* LeaderboardHabitCollectionViewCell.swift */,
-				CEA7004729B3A8290000D803 /* LoggedHabit.swift */,
 				CE87443529A956CC00903B6F /* Settings.swift */,
 				CE013DFD29A80876005467EC /* APIService.swift */,
 				CE013DFB29A7C9DB005467EC /* APIRequest.swift */,
-				CE013DF929A6CDFA005467EC /* Color.swift */,
-				CE013DF729A6CD16005467EC /* Category.swift */,
-				CE013DF529A6CCD4005467EC /* Habit.swift */,
-				CE013DF129A6C190005467EC /* HabitDetailViewController.swift */,
-				CE013DEF29A6B35A005467EC /* LogHabitCollectionViewController.swift */,
-				CE013DEB29A6B328005467EC /* HabitCollectionViewController.swift */,
-				CE013DE929A6B30F005467EC /* HomeCollectionViewController.swift */,
-				CEBFC9FF29FD944C00984BDB /* HabitDetailCollectionViewCell.swift */,
-				CEA7004529B2828B0000D803 /* HabitCount.swift */,
-				CEA7004129AD4CF40000D803 /* UserCount.swift */,
-				CEFB0D6C29EA032C004FD9DC /* HabitRank.swift */,
-				CEA7003D29ABC8F20000D803 /* User.swift */,
-				CEA7003F29AD4C6B0000D803 /* HabitStatistics.swift */,
-				CEA7004329B282250000D803 /* UserStatistics.swift */,
-				CEA7003929AA98130000D803 /* UICollectionViewDiffableDataSource+ViewModel.swift */,
-				CEA7003B29AAB2B80000D803 /* NamedSectionHeaderView.swift */,
-				CE013DF329A6C1A7005467EC /* UserDetailViewController.swift */,
+				CE28492F2A3F18CD002D9922 /* Model */,
+				CE28492E2A3F18A9002D9922 /* View */,
+				CE28492D2A3F188E002D9922 /* Controller */,
 				CE57619829A679B20009B7EE /* Assets.xcassets */,
 				CE57619D29A679B20009B7EE /* Info.plist */,
-				CE08F17329EC6173005A7E01 /* UserColectionViewCell.swift */,
-				CE013DED29A6B33D005467EC /* UserCollectionViewController.swift */,
 				CE57619A29A679B20009B7EE /* LaunchScreen.storyboard */,
 				CE57619529A679B00009B7EE /* Main.storyboard */,
 				CECC05FF2A098427004BC0D9 /* RiveAssets */,
@@ -249,12 +281,12 @@
 				CE87443629A956CC00903B6F /* Settings.swift in Sources */,
 				CEA7004C29B3CA5B0000D803 /* FollowedUserCollectionViewCell.swift in Sources */,
 				CEA7003E29ABC8F20000D803 /* User.swift in Sources */,
-				CEA7004429B282250000D803 /* UserStatistics.swift in Sources */,
 				CE013DF429A6C1A7005467EC /* UserDetailViewController.swift in Sources */,
 				CEA7004A29B3C0F80000D803 /* LeaderboardHabitCollectionViewCell.swift in Sources */,
 				CE013DEC29A6B328005467EC /* HabitCollectionViewController.swift in Sources */,
 				CE57619029A679B00009B7EE /* AppDelegate.swift in Sources */,
 				CEA7005029B3DB280000D803 /* CombinedStatistics.swift in Sources */,
+				CE28492C2A3F174B002D9922 /* UserStatistics.swift in Sources */,
 				CEA7004029AD4C6B0000D803 /* HabitStatistics.swift in Sources */,
 				CEE38C6029BE05FA005175E8 /* BadgeSupplementaryView.swift in Sources */,
 				CEA7004629B2828B0000D803 /* HabitCount.swift in Sources */,
@@ -414,6 +446,7 @@
 				DEVELOPMENT_TEAM = 8NG24992XA;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DC Habits/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Habit App";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -442,6 +475,7 @@
 				DEVELOPMENT_TEAM = 8NG24992XA;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DC Habits/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Habit App";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

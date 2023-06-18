@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 enum Setting {
     static let favoriteHabits = "favoriteHabits"
@@ -14,7 +15,7 @@ enum Setting {
 
 struct Settings {
 
-    let currentUser = User(id: "ActiveUser", name: "Active User", color: Color(hue: 0.15707988194531695, saturation: 0.11293901213002762, brightness: 0.12267943863794188), bio: "It is me!")
+    let currentUser = User(id: "ActiveUser", name: "Active User", color: Color(hue: 0, saturation: 0, brightness: 0) , bio: "It is me!")
     
     static var shared = Settings()
     

@@ -20,13 +20,34 @@ class UserCollectionViewController: UICollectionViewController {
     }
     
     static let badgeElementKind = "badge-element-kind"
-
     
+    private let spinner: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView()
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        spinner.hidesWhenStopped = true
+        return spinner
+    }()
+    
+    private func addConstraints() {
+        NSLayoutConstraint.activate([
+            spinner.heightAnchor.constraint(equalToConstant: 100),
+            spinner.widthAnchor.constraint(equalToConstant: 100),
+            spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+        ])
+    }
+
+ // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-                
+        view.addSubview(spinner)
+        spinner.startAnimating()
+        addConstraints()
+       
         configureHierarchy()
         dataSource = createDataSource()
+        collectionView.alpha = 0
+        collectionView.isHidden = true
         collectionView.dataSource = dataSource
         collectionView.collectionViewLayout = createLayout()
         imageRequest()
@@ -36,7 +57,16 @@ class UserCollectionViewController: UICollectionViewController {
     typealias DataSourceType = UICollectionViewDiffableDataSource<ViewModel.Section, ViewModel.Item>
     
     var dataSource: DataSourceType!
-    var model = Model()
+    
+    var model = Model() {
+        didSet {
+            spinner.stopAnimating()
+            collectionView.isHidden = false
+            UIView.animate(withDuration: 0.3) {
+                self.collectionView.alpha = 1
+            }
+        }
+    }
     
     enum ViewModel {
         typealias Section = Int
@@ -124,11 +154,11 @@ class UserCollectionViewController: UICollectionViewController {
 
             var backgroundConfiguration = UIBackgroundConfiguration.clear()
          
-            backgroundConfiguration.backgroundColor = item.user.color?.uiColor ?? UIColor.systemGray4
-            
+            backgroundConfiguration.backgroundColor = item.user.color?.uiColor ?? UIColor.white
             cell.backgroundConfiguration = backgroundConfiguration
             cell.configure(with: item.userImage, and: item.user.name)
-            cell.layer.cornerRadius = 30
+            cell.layer.cornerRadius = 8
+            
             return cell
         }
         
@@ -235,7 +265,7 @@ extension UserCollectionViewController {
     func configureHierarchy() {
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        collectionView.backgroundColor = .systemBackground
+        collectionView.backgroundColor = .secondarySystemGroupedBackground
         collectionView.register(UserColectionViewCell.self, forCellWithReuseIdentifier: UserColectionViewCell.reuseIdentifier)
         collectionView.register(BadgeSupplementaryView.self, forSupplementaryViewOfKind: UserCollectionViewController.badgeElementKind, withReuseIdentifier: BadgeSupplementaryView.reuseIdentifier)
         view.addSubview(collectionView)
